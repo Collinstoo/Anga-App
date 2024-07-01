@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class ContactUsPage extends StatelessWidget {
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Contact Us'),
+        backgroundColor: Color(0xFF340404),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Get in Touch',
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF800000),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.email, color: Color(0xFF800000)),
+                  title: Text('Email Us'),
+                  subtitle: Text('info@flightbooking.com'),
+                  onTap: () => _launchURL('mailto:info@flightbooking.com'),
+                ),
+              ),
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.phone, color: Color(0xFF800000)),
+                  title: Text('Call Us'),
+                  subtitle: Text('+1 234 567 890'),
+                  onTap: () => _launchURL('tel:+1234567890'),
+                ),
+              ),
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.chat, color: Color(0xFF800000)),
+                  title: Text('WhatsApp'),
+                  subtitle: Text('+1 234 567 890'),
+                  onTap: () => _launchURL('https://wa.me/1234567890'),
+                ),
+              ),
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.facebook, color: Color(0xFF800000)),
+                  title: Text('Facebook'),
+                  subtitle: Text('Follow us on Facebook'),
+                  onTap: () => _launchURL('https://www.facebook.com/flightbooking'),
+                ),
+              ),
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.link, color: Color(0xFF800000)),
+                  title: Text('Website'),
+                  subtitle: Text('Visit our website'),
+                  onTap: () => _launchURL('https://www.flightbooking.com'),
+                ),
+              ),
+              SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.location_on, color: Color(0xFF800000)),
+                  title: Text('Our Address'),
+                  subtitle: Text('123 Main Street, City, Country'),
+                  onTap: () => _launchURL('https://maps.google.com/?q=123+Main+Street,+City,+Country'),
+                ),
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: Text(
+                  'We are here to assist you 24/7',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF800000),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
