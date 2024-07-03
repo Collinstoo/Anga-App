@@ -1,4 +1,8 @@
+import 'package:flight_booking_application/contactus_page.dart';
+import 'package:flight_booking_application/seatbooking_page.dart';
 import 'package:flutter/material.dart';
+// import 'package:flight_booking_application/book_flight_page.dart';
+// import 'package:flight_booking_application/ticketing_page.dart';
 
 class PaymentPage extends StatelessWidget {
   final TextEditingController phoneController = TextEditingController();
@@ -20,6 +24,71 @@ class PaymentPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('MPesa Payment'),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0xFF4CAF50), // Green color
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.flight),
+              title: Text('Book Flight'),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => BookFlightPage()),
+                // );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.event_seat),
+              title: Text('Seat Booking'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SeatBookingPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.airplane_ticket),
+              title: Text('Ticketing'),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => TicketingPage()),
+                // );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.contact_page),
+              title: Text('Contact Us'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContactUsPage()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

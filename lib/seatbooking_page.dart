@@ -1,5 +1,9 @@
+import 'package:flight_booking_application/contactus_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flight_booking_application/payment_page.dart';
+// import 'package:flight_booking_application/book_flight_page.dart';
+// import 'package:flight_booking_application/ticketing_page.dart';
+
 
 class SeatBookingPage extends StatelessWidget {
   final int totalSeats = 100;
@@ -49,6 +53,72 @@ class SeatBookingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Seat Booking'),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueAccent, // Maroon color
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.flight),
+              title: Text('Book Flight'),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => HomePage()),
+                // );
+              },
+            ),
+
+            ListTile(
+              leading: Icon(Icons.payment),
+              title: Text('Payment'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PaymentPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.airplane_ticket),
+              title: Text('Ticketing'),
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => TicketingPage()),
+                // );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.contact_page),
+              title: Text('Contact Us'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContactUsPage()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -131,7 +201,7 @@ class SeatBookingPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>  PaymentPage()),
+                    MaterialPageRoute(builder: (context) => PaymentPage()),
                   );
                   // Handle book action
                   ScaffoldMessenger.of(context).showSnackBar(

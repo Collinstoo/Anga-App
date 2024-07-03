@@ -1,3 +1,5 @@
+import 'package:flight_booking_application/contactus_page.dart';
+import 'package:flight_booking_application/payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -55,58 +57,65 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Book Flights'),
-        actions: [
-          PopupMenuButton<String>(
-            icon: Icon(
-              Icons.read_more_rounded,
-              color: Colors.black,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
             ),
-            offset: Offset(0, 50),
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            onSelected: (String choice) {
-              // Handle menu item selection
-              switch (choice) {
-                case 'Book Flight':
-                // Navigate to book flight page
-                  break;
-                case 'Airports':
-                // Navigate to airports page
-                  break;
-                case 'About Us':
 
-                // Navigate to about us page
-                  break;
-                case 'Contact Us':
-                  Navigator.pushNamed(context, '/contact');
-                  // Navigate to contact us page
-                  break;
+            ListTile(
+              leading: Icon(Icons.event_seat),
+              title: Text('Seat Booking'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SeatBookingPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.payment),
+              title: Text('Payment'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PaymentPage()),
+                );
+                // Handle Payment tap
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.confirmation_number),
+              title: Text('Ticketing'),
+              onTap: () {
+                // Handle Ticketing tap
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.contact_page),
+              title: Text('Contact Us'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContactUsPage()),
+                );
               }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: 'Book Flight',
-                  child: Text('Book Flight'),
-                ),
-                PopupMenuItem<String>(
-                  value: 'Airports',
-                  child: Text('Airports'),
-                ),
-                PopupMenuItem<String>(
-                  value: 'About Us',
-                  child: Text('About Us'),
-                ),
-                PopupMenuItem<String>(
-                  value: 'Contact Us',
-                  child: Text('Contact Us'),
-                ),
-              ];
-            },
-          ),
-        ],
+
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -156,7 +165,8 @@ class _HomePageState extends State<HomePage> {
                         : DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'From',
-                        prefixIcon: Icon(Icons.flight_takeoff, color: Color(0xFF800000)),
+                        prefixIcon: Icon(Icons.flight_takeoff,
+                            color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -179,7 +189,8 @@ class _HomePageState extends State<HomePage> {
                         : DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'To',
-                        prefixIcon: Icon(Icons.flight_land, color: Color(0xFF800000)),
+                        prefixIcon: Icon(Icons.flight_land,
+                            color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -216,7 +227,8 @@ class _HomePageState extends State<HomePage> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Departure',
-                        prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF800000)),
+                        prefixIcon:
+                        Icon(Icons.calendar_today, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -242,7 +254,8 @@ class _HomePageState extends State<HomePage> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Return',
-                        prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF800000)),
+                        prefixIcon:
+                        Icon(Icons.calendar_today, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -252,7 +265,8 @@ class _HomePageState extends State<HomePage> {
                     DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'Class',
-                        prefixIcon: Icon(Icons.class_, color: Color(0xFF800000)),
+                        prefixIcon:
+                        Icon(Icons.class_, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -283,7 +297,8 @@ class _HomePageState extends State<HomePage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF800000), // Maroon button color
-                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -291,7 +306,8 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>SeatBookingPage()),
+                          MaterialPageRoute(
+                              builder: (context) => SeatBookingPage()),
                         );
                         // Handle search flights
                       },
