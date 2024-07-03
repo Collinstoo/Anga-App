@@ -58,12 +58,11 @@ class _SignupPageState extends State<SignupPage> {
       backgroundColor: Colors.pink, // Dark maroon background color
       appBar: AppBar(
         title: Text('SIGN UP'),
-
-
-        titleTextStyle: TextStyle(
-          fontSize: 17.0,),
-
-
+        titleTextStyle: GoogleFonts.albertSans(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
         backgroundColor: Colors.pink, // Dark maroon app bar
