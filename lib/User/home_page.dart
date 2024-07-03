@@ -1,11 +1,10 @@
 import 'package:flight_booking_application/User/contactus_page.dart';
-import 'package:flight_booking_application/User/payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'seatbooking_page.dart';
+import 'payment_page.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -56,18 +55,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-
         title: Text('Book Flights'),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
+                color: Color(0xFF800000), // Maroon color
               ),
               child: Text(
                 'Menu',
@@ -96,14 +93,13 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(builder: (context) => PaymentPage()),
                 );
-                // Handle Payment tap
               },
             ),
             ListTile(
-              leading: Icon(Icons.confirmation_number),
+              leading: Icon(Icons.airplane_ticket),
               title: Text('Ticketing'),
               onTap: () {
-                // Handle Ticketing tap
+                // Navigate to ticketing page
               },
             ),
             ListTile(
@@ -114,101 +110,41 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(builder: (context) => ContactUsPage()),
                 );
-              }
-
+                // Navigate to contact us page
+              },
             ),
           ],
         ),
-
-        // leading: null,
-        // automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        titleTextStyle: GoogleFonts.albertSans(
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text('BOOK FLIGHT'),
-        centerTitle: true,
-        actions: [
-          PopupMenuButton<String>(
-            icon: Icon(
-              Icons.menu,
-              color: Colors.black,
-            ),
-            offset: Offset(0, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0),
-            ),
-            onSelected: (String choice) {
-              // Handle menu item selection
-              switch (choice) {
-                case 'Book flight':
-                // Navigate to book flight page
-                  break;
-                case 'Airports':
-                // Navigate to airports page
-                  break;
-                case 'About Us':
-                  Navigator.pushNamed(context, '/contact');
-                // Navigate to about us page
-                  break;
-                case 'Contact Us':
-                  Navigator.pushNamed(context, '/contact');
-                  // Navigate to contact us page
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: 'Book Flight',
-                  child: Text('BOOK FLIGHT'),
-                ),
-                PopupMenuItem<String>(
-                  value: 'Airports',
-                  child: Text('AIRPORTS'),
-                ),
-                PopupMenuItem<String>(
-                  value: 'About Us',
-                  child: Text('ABOUT US'),
-                ),
-                PopupMenuItem<String>(
-                  value: 'Contact Us',
-                  child: Text('CONTACT US'),
-                ),
-                PopupMenuItem<String>(
-                  value: 'Contact Us',
-                  child: Text('LOGOUT'),
-                ),
-              ];
-            },
-          ),
-        ],
-
       ),
-      body: Container(
-        // decoration: BoxDecoration(
-        //     gradient: LinearGradient(
-        //         colors: [
-        //           Colors.black,
-        //           Colors.pink,
-        //         ],
-        //
-        //     )
-        // ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              // mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Welcome ${widget.username}',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF800000), // Maroon text color
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.notifications),
+                    onPressed: () {
+                      // Handle notifications tap
+                    },
+                  ),
+                ],
+              ),
+              Center(
+                child: Column(
                   children: [
-
                     Image.asset(
                       'assets/pla.jpg',
                       height: 200.0,
@@ -228,8 +164,7 @@ class _HomePageState extends State<HomePage> {
                         : DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'From',
-                        prefixIcon: Icon(Icons.flight_takeoff,
-                            color: Color(0xFF800000)),
+                        prefixIcon: Icon(Icons.flight_takeoff, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -252,8 +187,7 @@ class _HomePageState extends State<HomePage> {
                         : DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'To',
-                        prefixIcon: Icon(Icons.flight_land,
-                            color: Color(0xFF800000)),
+                        prefixIcon: Icon(Icons.flight_land, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -290,8 +224,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Departure',
-                        prefixIcon:
-                        Icon(Icons.calendar_today, color: Color(0xFF800000)),
+                        prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -317,8 +250,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Return',
-                        prefixIcon:
-                        Icon(Icons.calendar_today, color: Color(0xFF800000)),
+                        prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -328,8 +260,7 @@ class _HomePageState extends State<HomePage> {
                     DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'Class',
-                        prefixIcon:
-                        Icon(Icons.class_, color: Color(0xFF800000)),
+                        prefixIcon: Icon(Icons.class_, color: Color(0xFF800000)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -360,8 +291,7 @@ class _HomePageState extends State<HomePage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF800000), // Maroon button color
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -369,222 +299,21 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => SeatBookingPage()),
+                          MaterialPageRoute(builder: (context) => SeatBookingPage()),
                         );
                         // Handle search flights
-=======
-
-                    Text(
-                      'Anga App ${widget.username}',
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.pink,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.notifications),
-                      color: Colors.black,
-                      alignment: Alignment.topRight,
-                      onPressed: () {
-                        // Handle notifications tap
->>>>>>> e7dc512 (Font Update)
                       },
+                      child: Text(
+                        'Search Flights',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Where Your Journey Begins! ${widget.username}',
-                      style: GoogleFonts.albertSans(
-                        fontSize: 13,)
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                  ],
-                ),
-                Center(
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        'assets/logo3.png',
-                        height: 250.0,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(height: 20),
-                      ToggleButtons(
-                        children: [Text('One Way'), Text('Round Trip')],
-                        isSelected: [true, false],
-                        onPressed: (int index) {
-                          // Handle toggle button selection
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      isLoadingCities
-                          ? CircularProgressIndicator()
-                          : DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'From',
-                          prefixIcon: Icon(Icons.flight_takeoff, color: Color(0xFF800000)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        items: cities.map((String city) {
-                          return DropdownMenuItem<String>(
-                            value: city,
-                            child: Text(city),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            fromCity = newValue;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      isLoadingCities
-                          ? CircularProgressIndicator()
-                          : DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'To',
-                          prefixIcon: Icon(Icons.flight_land, color: Color(0xFF800000)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        items: cities.map((String city) {
-                          return DropdownMenuItem<String>(
-                            value: city,
-                            child: Text(city),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            toCity = newValue;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        controller: departureDateController,
-                        readOnly: true,
-                        onTap: () async {
-                          final DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(Duration(days: 365)),
-                          );
-                          if (pickedDate != null) {
-                            setState(() {
-                              departureDateController.text =
-                              "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-                            });
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Departure',
-                          prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF800000)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        controller: returnDateController,
-                        readOnly: true,
-                        onTap: () async {
-                          final DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(Duration(days: 365)),
-                          );
-                          if (pickedDate != null) {
-                            setState(() {
-                              returnDateController.text =
-                              "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-                            });
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Return',
-                          prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF800000)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'Class',
-                          prefixIcon: Icon(Icons.class_, color: Color(0xFF800000)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        items: <String>['Economy', 'Business', 'Premier', 'VIP']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (_) {
-                          // Handle dropdown change
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      PassengerDropdown(
-                        adults: adults,
-                        children: children,
-                        onChanged: (passengerData) {
-                          setState(() {
-                            adults = passengerData['adults']!;
-                            children = passengerData['children']!;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF800000), // Maroon button color
-                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>SeatBookingPage()),
-                          );
-                          // Handle search flights
-                        },
-                        child: Text(
-                          'Search Flights',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
