@@ -1,4 +1,4 @@
-import 'package:flight_booking_application/WelcomeScreen.dart';
+// import 'package:flight_booking_application/WelcomeScreen.dart';
 import 'package:flight_booking_application/User/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'User/contactus_page.dart';
+import 'admin/WelcomeScreen.dart';
 // import 'package:';
 
 

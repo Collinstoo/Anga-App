@@ -36,8 +36,8 @@ dependencies:
   google_sign_in: ^6.0.0
   flutter_signin_button: ^2.0.0
   intl_phone_number_input: ^0.7.0+2
-#  http: ^1.2.1
-  http: ^0.13.3
+  http: ^1.2.1
+#  http: ^0.13.3
   intl_phone_field: ^3.0.1
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.20
