@@ -73,7 +73,8 @@ class _LoginPageState extends State<LoginPage> {
           centerTitle: true,
           iconTheme: IconThemeData(color: Colors.white),
           title: Text('LOGIN'),
-          backgroundColor: Color(0xFF444444), // Dark maroon app bar color
+          backgroundColor: Colors.pink // Cute dark maroon background color
+          // backgroundColor: Color(0xFF444444), // Dark maroon app bar color
         ),
         body: Container(
           decoration: BoxDecoration(

@@ -54,9 +54,10 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF340404), // Dark maroon background color
+      backgroundColor: Colors.pink, // Dark maroon background color
       appBar: AppBar(
         title: Text('SIGN UP'),
+
         titleTextStyle: TextStyle(
           fontSize: 17.0,
           fontWeight: FontWeight.bold,
@@ -64,7 +65,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
-        backgroundColor: Colors.black, // Dark maroon app bar
+        backgroundColor: Colors.pink, // Dark maroon app bar
       ),
       body: Container(
         decoration: BoxDecoration(
