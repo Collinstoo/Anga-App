@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -60,10 +61,10 @@ class _RemoveUsersState extends State<RemoveUsers> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        titleTextStyle: TextStyle(
-          color: Colors.white,
+        titleTextStyle: GoogleFonts.albertSans(
+          fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontSize: 17.0,
+          color: Colors.white,
         ),
         title: Text('Remove Users'),
         centerTitle: true,

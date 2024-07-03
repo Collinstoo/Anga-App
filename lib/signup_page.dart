@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -57,9 +58,14 @@ class _SignupPageState extends State<SignupPage> {
       backgroundColor: Colors.pink, // Dark maroon background color
       appBar: AppBar(
         title: Text('SIGN UP'),
+<<<<<<< HEAD
 
         titleTextStyle: TextStyle(
           fontSize: 17.0,
+=======
+        titleTextStyle: GoogleFonts.albertSans(
+          fontSize: 17,
+>>>>>>> e7dc512 (Font Update)
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),

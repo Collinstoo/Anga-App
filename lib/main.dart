@@ -3,6 +3,9 @@ import 'package:flight_booking_application/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flight_booking_application/contactus_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+
 
 
 void main(){
@@ -24,7 +27,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: ('inter'),
+        // fontFamily: ('AlbertSans_Regular'),
+        textTheme: GoogleFonts.albertSansTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: GoogleFonts.albertSans(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
         useMaterial3: true,
       ),
       initialRoute: '/',

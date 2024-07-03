@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -90,10 +91,10 @@ class _AddFlightState extends State<AddFlight> {
         backgroundColor: Colors.black,
         title: Text('FLIGHT'),
         centerTitle: true,
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 17.0,
+        titleTextStyle: GoogleFonts.albertSans(
+          fontSize: 17,
           fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
       ),
 

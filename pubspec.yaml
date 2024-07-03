@@ -30,13 +30,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^6.2.1
   firebase_core: ^2.0.0
   firebase_auth: ^4.1.0
   google_sign_in: ^6.0.0
   flutter_signin_button: ^2.0.0
   intl_phone_number_input: ^0.7.0+2
-#  http: ^1.2.1
-  http: ^0.13.3
+  http: ^1.2.1
+#  http: ^0.13.3
   intl_phone_field: ^3.0.1
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.20
@@ -87,6 +88,8 @@ flutter:
   - assets/pla1.jpg
   - assets/pla3.jpeg
   - assets/plane.png
+  - assets/logo2.png
+  - assets/logo3.png
 
 
 
@@ -102,9 +105,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
 fonts:
-  - family: Inter
+  - family: Albert
     fonts:
-      - asset: fonts/Inter-Medium.ttf
+      - asset: fonts/AlbertSans_Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

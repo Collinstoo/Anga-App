@@ -16,13 +16,10 @@ class WelcomeScreen extends StatelessWidget {
         width: double.infinity,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
-
-
                 colors: [
                   Colors.black,
                   Colors.pink,
-                ]
-            )
+                ]            )
         ),
         child: Column(
             children: [

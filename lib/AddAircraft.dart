@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -85,10 +86,11 @@ class _AddAircraftState extends State<AddAircraft> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.black,
-        titleTextStyle: TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 17,),
+        titleTextStyle: GoogleFonts.albertSans(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
         title: Text('AIRCRAFT'),
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0.0,

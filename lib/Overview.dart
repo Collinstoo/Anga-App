@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 
 class OverView extends StatefulWidget {
   @override
@@ -151,10 +152,10 @@ class _OverViewState extends State<OverView> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text('OVERVIEW'),
-        titleTextStyle: TextStyle(
-          color: Colors.white,
+        titleTextStyle: GoogleFonts.albertSans(
+          fontSize: 17,
           fontWeight: FontWeight.bold,
-          fontSize: 17.0,
+          color: Colors.white,
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
