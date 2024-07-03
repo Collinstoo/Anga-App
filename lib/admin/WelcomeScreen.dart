@@ -1,7 +1,6 @@
-import 'package:flight_booking_application/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flight_booking_application/signup_page.dart';
-import 'package:flight_booking_application/login_page.dart';
+import 'package:flight_booking_application/User/signup_page.dart';
+import 'package:flight_booking_application/User/login_page.dart';
 import 'AdminLogin.dart';
 
 

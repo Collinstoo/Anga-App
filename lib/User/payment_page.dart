@@ -1,8 +1,9 @@
-import 'package:flight_booking_application/contactus_page.dart';
-import 'package:flight_booking_application/seatbooking_page.dart';
+import 'package:flight_booking_application/User/contactus_page.dart';
+import 'package:flight_booking_application/User/home_page.dart';
+import 'package:flight_booking_application/User/seatbooking_page.dart';
 import 'package:flutter/material.dart';
 // import 'package:flight_booking_application/book_flight_page.dart';
-// import 'package:flight_booking_application/ticketing_page.dart';
+// import 'package:flight_booking_application/ticketing_page.dart'
 
 class PaymentPage extends StatelessWidget {
   final TextEditingController phoneController = TextEditingController();

@@ -1,6 +1,6 @@
-import 'package:flight_booking_application/contactus_page.dart';
+import 'package:flight_booking_application/User/contactus_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flight_booking_application/payment_page.dart';
+import 'package:flight_booking_application/User/payment_page.dart';
 // import 'package:flight_booking_application/book_flight_page.dart';
 // import 'package:flight_booking_application/ticketing_page.dart';
 
@@ -66,7 +66,7 @@ class SeatBookingPage extends StatelessWidget {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blueAccent, // Maroon color
+                color: Color(0xFF800000), // Maroon color
               ),
               child: Text(
                 'Menu',
@@ -82,7 +82,7 @@ class SeatBookingPage extends StatelessWidget {
               onTap: () {
                 // Navigator.push(
                 //   context,
-                //   MaterialPageRoute(builder: (context) => HomePage()),
+                //   MaterialPageRoute(builder: (context) => BookFlightPage()),
                 // );
               },
             ),
