@@ -267,9 +267,9 @@ class _OverViewState extends State<OverView> {
   String _getItemSubtitle(dynamic item) {
     switch (filter) {
       case 'Airports':
-        return 'Name: ${item['name']},\nID: ${item['airport_id']},\nCountry: ${item['country']},\nCity: ${item['city']}';
+        return 'Name: ${item['airport_name']},\nID: ${item['airport_id']},\nCountry: ${item['country']},\nCity: ${item['city']}';
       case 'Aircrafts':
-        return 'Registration: ${item['registration_number']},\nTotal Seats: ${item['total_seats']},'
+        return 'Registration: ${item['registration_number']},\nID: ${item['airplane_id']},\nTotal Seats: ${item['total_seats']},'
             '\nEconomy Seats: ${item['economy_seats']},\nBusiness Seats: ${item['business_seats']}';
       case 'Tickets':
         return 'Booking ID: ${item['bookingId']},\nPassenger ID: ${item['passengerId']},\n'

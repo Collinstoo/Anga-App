@@ -23,27 +23,40 @@ class _AddFlightState extends State<AddFlight> {
   //function to add flight
   void _addFlight() async {
     String flightNumber = _flightNumberController.text;
-    String departureTime = _departureTimeController.text;
-    String arrivalTime = _arrivalTimeController.text;
+    String departure_date_Time = _departureTimeController.text;
+    String arrival_date_Time = _arrivalTimeController.text;
     String departureAirport = _departureAirportController.text;
     String arrivalAirport = _arrivalAirportController.text;
 
 
     //  REST API endpoint for add flight
     var response = await http.post(
-      Uri.parse('http://yourapi.com/api/flight/create'),
+      Uri.parse('http://192.168.1.63:8000/api/flights/create'),
       body: jsonEncode({
         'flight_number': flightNumber,
-        'departure_time': departureTime,
-        'arrival_time': arrivalTime,
+        'departure_date_time': departure_date_Time,
+        'arrival_date_time': arrival_date_Time,
         'departure_airport': departureAirport,
         'arrival_airport': arrivalAirport,
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
-  }
 
+    if (response.statusCode == 201) {
+      _showSnackbar('Successfully Added');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
+  }
+  // Function to show snackbar
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
   //function to delete flight
   void _deleteFlight() async {
@@ -60,8 +73,8 @@ class _AddFlightState extends State<AddFlight> {
   //function to update flight
   void _updateFlight() async {
     String flightNumber = _flightNumberController.text;
-    String departureTime = _departureTimeController.text;
-    String arrivalTime = _arrivalTimeController.text;
+    String departure_date_Time = _departureTimeController.text;
+    String arrival_date_Time = _arrivalTimeController.text;
     String departureAirport = _departureAirportController.text;
     String arrivalAirport = _arrivalAirportController.text;
 
@@ -69,8 +82,8 @@ class _AddFlightState extends State<AddFlight> {
     var response = await http.put(
       Uri.parse('http://yourapi.com/api/flight/$flightNumber'),
       body: jsonEncode({
-        'departure_time': departureTime,
-        'arrival_time': arrivalTime,
+        'departure_date_time': departure_date_Time,
+        'arrival_date_time': arrival_date_Time,
         'departure_airport': departureAirport,
         'arrival_airport': arrivalAirport,
       }),
@@ -129,13 +142,13 @@ class _AddFlightState extends State<AddFlight> {
                     ),
                     TextField(
                       controller: _departureTimeController,
-                      decoration: InputDecoration(labelText: 'Departure Time', labelStyle: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(labelText: 'Departure  Date and Time', labelStyle: TextStyle(color: Colors.black),
                           filled: false,
                           fillColor: Colors.white),
                     ),
                     TextField(
                       controller: _arrivalTimeController,
-                      decoration: InputDecoration(labelText: 'Arrival Time', labelStyle: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(labelText: 'Arrival  Date and Time', labelStyle: TextStyle(color: Colors.black),
                           filled: false,
                           fillColor: Colors.white),
                     ),
