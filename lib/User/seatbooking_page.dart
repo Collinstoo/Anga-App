@@ -1,48 +1,79 @@
-import 'package:flight_booking_application/User/contactus_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flight_booking_application/User/payment_page.dart';
-// import 'package:flight_booking_application/book_flight_page.dart';
-// import 'package:flight_booking_application/ticketing_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+import 'contactus_page.dart';
+import 'payment_page.dart';
+import '../admin/WelcomeScreen.dart';
 
-class SeatBookingPage extends StatelessWidget {
+class SeatBookingPage extends StatefulWidget {
+  @override
+  _SeatBookingPageState createState() => _SeatBookingPageState();
+}
+
+class _SeatBookingPageState extends State<SeatBookingPage> {
   final int totalSeats = 100;
   final int vipSeats = 15;
   final int premierSeats = 15;
   final int businessSeats = 20;
   final int economySeats = 50;
 
+  List<bool> availableSeats = List.filled(100, true); // Initialize all seats as available
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAvailableSeats();
+  }
+
+  Future<void> fetchAvailableSeats() async {
+    final response = await http.get(Uri.parse('http://192.168.1.23:8087/api/seats'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        availableSeats = List<bool>.from(json.decode(response.body));
+      });
+    } else {
+      throw Exception('Failed to load seats');
+    }
+  }
+
   List<Widget> buildSeats(int count, Color color, String label, int startNumber) {
     return List<Widget>.generate(
       count,
-          (index) => Container(
-        margin: const EdgeInsets.all(2.0),
-        padding: const EdgeInsets.all(4.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(4.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade300,
-              spreadRadius: 1,
-              blurRadius: 3,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(
-              Icons.event_seat,
-              color: color,
-              size: 24.0,
-            ),
-            Text(
-              '$label ${startNumber + index}',
-              style: TextStyle(fontSize: 10.0),
-            ),
-          ],
-        ),
-      ),
+          (index) {
+        final seatNumber = startNumber + index;
+        final isAvailable = availableSeats[seatNumber - 1];
+
+        return Container(
+          margin: const EdgeInsets.all(2.0),
+          padding: const EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade300,
+                spreadRadius: 1,
+                blurRadius: 3,
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Icon(
+                Icons.event_seat,
+                color: isAvailable ? color : Colors.grey,
+                size: 24.0,
+              ),
+              Text(
+                '$label $seatNumber',
+                style: TextStyle(fontSize: 10.0),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -86,7 +117,6 @@ class SeatBookingPage extends StatelessWidget {
                 // );
               },
             ),
-
             ListTile(
               leading: Icon(Icons.payment),
               title: Text('Payment'),
@@ -114,6 +144,16 @@ class SeatBookingPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ContactUsPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_sharp),
+              title: Text('LOG OUT'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()),
                 );
               },
             ),

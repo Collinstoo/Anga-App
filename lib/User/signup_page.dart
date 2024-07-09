@@ -20,7 +20,7 @@ class _SignupPageState extends State<SignupPage> {
   String phoneNumber = '';
 
   Future<void> registerUser(String name, String username, String email, String password, String phoneNumber, String address) async {
-    final url = Uri.parse('http://192.168.1.63:8000/api/register'); // Replace with your API endpoint
+    final url = Uri.parse('http://192.168.1.63:8000/api/auth/register'); // Replace with your API endpoint
 
     final response = await http.post(
       url,

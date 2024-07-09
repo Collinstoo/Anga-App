@@ -79,7 +79,7 @@ class TicketingPage extends StatelessWidget {
                         ),
                         onPressed: () {
 
-                          Navigator.pop(context); // Example navigation back
+                          Navigator.pop(context);
                         },
                         child: Text(
                           'Back to Home',
