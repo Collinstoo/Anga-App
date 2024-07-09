@@ -10,17 +10,13 @@ class AddFlight extends StatefulWidget {
 
 class _AddFlightState extends State<AddFlight> {
   final TextEditingController _flightNumberController = TextEditingController();
-
   final TextEditingController _departureTimeController = TextEditingController();
-
   final TextEditingController _arrivalTimeController = TextEditingController();
-
   final TextEditingController _departureAirportController = TextEditingController();
-
   final TextEditingController _arrivalAirportController = TextEditingController();
+  final TextEditingController _flightIdController = TextEditingController(); // Added controller for flight id
 
-
-  //function to add flight
+  // Function to add flight
   void _addFlight() async {
     String flightNumber = _flightNumberController.text;
     String departure_date_Time = _departureTimeController.text;
@@ -28,8 +24,7 @@ class _AddFlightState extends State<AddFlight> {
     String departureAirport = _departureAirportController.text;
     String arrivalAirport = _arrivalAirportController.text;
 
-
-    //  REST API endpoint for add flight
+    // REST API endpoint for adding flight
     var response = await http.post(
       Uri.parse('http://192.168.1.63:8000/api/admin/wing/create'),
       body: jsonEncode({
@@ -48,6 +43,7 @@ class _AddFlightState extends State<AddFlight> {
       _showSnackbar('Unsuccessful');
     }
   }
+
   // Function to show snackbar
   void _showSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -58,30 +54,38 @@ class _AddFlightState extends State<AddFlight> {
     );
   }
 
-  //function to delete flight
+  // Function to delete flight
   void _deleteFlight() async {
-    String flightNumber = _flightNumberController.text;
+    String id = _flightIdController.text; // Use flight id
 
-    //  REST API endpoint for deleting flight
+    // REST API endpoint for deleting flight
     var response = await http.delete(
-      Uri.parse('http://yourapi.com/api/admin/wing/delete/$flightNumber'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/wing/delete/$id'),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+    // print(response.body);
+
+    if (response.statusCode == 200) {
+      _showSnackbar('Successfully Deleted');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
   }
 
-  //function to update flight
+  // Function to update flight
   void _updateFlight() async {
+    String id = _flightIdController.text; // Use flight id
     String flightNumber = _flightNumberController.text;
     String departure_date_Time = _departureTimeController.text;
     String arrival_date_Time = _arrivalTimeController.text;
     String departureAirport = _departureAirportController.text;
     String arrivalAirport = _arrivalAirportController.text;
 
-    //  REST API endpoint for updating flight
+    // REST API endpoint for updating flight
     var response = await http.patch(
-      Uri.parse('http://yourapi.com/api/admin/wing/update/$flightNumber'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/wing/update/$id'),
       body: jsonEncode({
+        'flight_number': flightNumber,
         'departure_date_time': departure_date_Time,
         'arrival_date_time': arrival_date_Time,
         'departure_airport': departureAirport,
@@ -89,11 +93,16 @@ class _AddFlightState extends State<AddFlight> {
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+    // print(response.body);
+
+    if (response.statusCode == 200) {
+      _showSnackbar('Successfully Updated');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
   }
 
-
-  //header
+  // Header
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,9 +119,7 @@ class _AddFlightState extends State<AddFlight> {
           color: Colors.white,
         ),
       ),
-
-
-      //body
+      // Body
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -124,7 +131,6 @@ class _AddFlightState extends State<AddFlight> {
             colors: [Colors.black, Colors.pink],
           ),
         ),
-
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -133,46 +139,60 @@ class _AddFlightState extends State<AddFlight> {
                 _buildExpansionTile(
                   title: 'Add Flight',
                   children: [
-                    //input fields with controllers
+                    // Input fields with controllers
                     TextField(
                       controller: _flightNumberController,
-                      decoration: InputDecoration(labelText: 'Flight Number', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Flight Number',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _departureTimeController,
-                      decoration: InputDecoration(labelText: 'Departure  Date and Time', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Departure  Date and Time',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _arrivalTimeController,
-                      decoration: InputDecoration(labelText: 'Arrival  Date and Time', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Arrival  Date and Time',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _departureAirportController,
-                      decoration: InputDecoration(labelText: 'Departure Airport', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Departure Airport',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _arrivalAirportController,
-                      decoration: InputDecoration(labelText: 'Arrival Airport', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Arrival Airport',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 15),
-                    //button to add
+                    // Button to add
                     ElevatedButton(
                       onPressed: _addFlight,
                       child: Text('ADD'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.purple),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -182,8 +202,8 @@ class _AddFlightState extends State<AddFlight> {
                   title: 'Delete Flight',
                   children: [
                     TextField(
-                      controller: _flightNumberController,
-                      decoration: InputDecoration(labelText: 'Flight Number'),
+                      controller: _flightIdController, // Use flight id
+                      decoration: InputDecoration(labelText: 'Flight ID'),
                     ),
                     SizedBox(height: 15),
                     ElevatedButton(
@@ -191,8 +211,7 @@ class _AddFlightState extends State<AddFlight> {
                       child: Text('DELETE'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -202,45 +221,67 @@ class _AddFlightState extends State<AddFlight> {
                   title: 'Update Flight',
                   children: [
                     TextField(
+                      controller: _flightIdController, // Use flight id
+                      decoration: InputDecoration(
+                        labelText: 'Flight ID',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    TextField(
                       controller: _flightNumberController,
-                      decoration: InputDecoration(labelText: 'Flight Number', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Flight Number',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _departureTimeController,
-                      decoration: InputDecoration(labelText: 'Departure Time', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Departure Time',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _arrivalTimeController,
-                      decoration: InputDecoration(labelText: 'Arrival Time', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Arrival Time',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _departureAirportController,
-                      decoration: InputDecoration(labelText: 'Departure Airport', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Departure Airport',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _arrivalAirportController,
-                      decoration: InputDecoration(labelText: 'Arrival Airport', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Arrival Airport',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 15),
-
-                    //button to update
+                    // Button to update
                     ElevatedButton(
                       onPressed: _updateFlight,
                       child: Text('UPDATE'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -253,9 +294,9 @@ class _AddFlightState extends State<AddFlight> {
     );
   }
 
-
-  //editing of the expansion tiles when closed and when open
-  Widget _buildExpansionTile({required String title, required List<Widget> children}) {
+  // Editing of the expansion tiles when closed and when open
+  Widget _buildExpansionTile
+      ({required String title, required List<Widget> children}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(0.0),
       child: ExpansionTile(
@@ -289,3 +330,4 @@ class _AddFlightState extends State<AddFlight> {
     );
   }
 }
+

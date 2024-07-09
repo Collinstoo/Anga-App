@@ -256,7 +256,7 @@ class _OverViewState extends State<OverView> {
           elevation: 5.0,
           margin: EdgeInsets.symmetric(vertical: 10.0),
           child: ListTile(
-            title: Text('ID: ${item['id']}'),
+            // title: Text('ID: ${item['id']}'),
             subtitle: Text(_getItemSubtitle(item)),
           ),
         );
@@ -287,7 +287,7 @@ class _OverViewState extends State<OverView> {
             'Status: ${item['status']},\nUser ID: ${item['userId']},'
             '\nCreated At: ${item['createdAt']},\nUpdated At: ${item['updatedAt']}';
       case 'Flights':
-        return 'Flight Number: ${item['Flight_Number']},\nDeparture Airport: ${item['Departure_Airport']},\n'
+        return 'Aircraft Registration Number: ${item['Flight_Number']},\nDeparture Airport: ${item['Departure_Airport']},\n'
             'Arrival Airport: ${item['Arrival_Airport']},\nPrice: ${item['Price']},\nCapacity: ${item['Capacity']},\n'
             'Arrival Date and Time: ${item['Arrival_Date_Time']},\nDeparture Date and Time: ${item['Departure_Date_Time']}';
       default:

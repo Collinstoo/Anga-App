@@ -19,7 +19,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
   }
 
   Future<void> _fetchUsers() async {
-    //  REST API endpoint to fetchusers
+    // REST API endpoint to fetch users
     var response = await http.get(Uri.parse('http://192.168.1.63:8000/api/admin/user/users'));
     if (response.statusCode == 200) {
       setState(() {
@@ -38,7 +38,9 @@ class _RemoveUsersState extends State<RemoveUsers> {
 
   List<dynamic> _getFilteredResults() {
     if (searchQuery.isNotEmpty) {
-      return users.where((user) => user['id'].toString().contains(searchQuery)).toList();
+      return users.where((user) =>
+      user['name'].toString().toLowerCase().contains(searchQuery.toLowerCase()) ||
+          user['email'].toString().toLowerCase().contains(searchQuery.toLowerCase())).toList();
     }
     return users;
   }
@@ -66,7 +68,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
-        title: Text('Remove Users'),
+        title: Text('REMOVE USERS'),
         centerTitle: true,
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
@@ -98,7 +100,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
     return TextField(
       onChanged: _filterSearchResults,
       decoration: InputDecoration(
-        labelText: 'Search by ID',
+        labelText: 'Search User by Name or Email',
         fillColor: Colors.white,
         filled: true,
         border: OutlineInputBorder(
@@ -123,9 +125,9 @@ class _RemoveUsersState extends State<RemoveUsers> {
           ),
           margin: EdgeInsets.symmetric(vertical: 10.0),
           child: ListTile(
-            title: Text('ID: ${user['id']}'),
-            subtitle: Text('Name: ${user['name']},\nEmail: ${user['email']},'
-                ' Address: ${user['address']},\nPhone Number: ${user['phone_number']},\nUsername: ${user['username']}'),
+            // title: Text('ID: ${user['id']}'),
+            subtitle: Text('Name: ${user['name']},\nEmail: ${user['email']},\n'
+                'Address: ${user['address']},\nPhone Number: ${user['phone_number']},\nUsername: ${user['username']}'),
             trailing: IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () async {
@@ -138,148 +140,3 @@ class _RemoveUsersState extends State<RemoveUsers> {
     );
   }
 }
-
-
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
-//
-// class RemoveUsers extends StatefulWidget {
-//   @override
-//   _RemoveUsersState createState() => _RemoveUsersState();
-// }
-//
-// class _RemoveUsersState extends State<RemoveUsers> {
-//   List<dynamic> users = [];
-//   String searchQuery = '';
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _fetchUsers();
-//   }
-//
-//   Future<void> _fetchUsers() async {
-//     //  REST API endpoint to fetch users
-//     var response = await http.get(Uri.parse('http://192.168.1.63:8000/api/users'));
-//     if (response.statusCode == 200) {
-//       setState(() {
-//         users = jsonDecode(response.body);
-//         print(response.body);
-//       });
-//     } else {
-//       print('Failed to load users');
-//     }
-//     }
-//   }
-//
-//   void _filterSearchResults(String query) {
-//     setState(() {
-//       searchQuery = query;
-//     });
-//   }
-//
-//   List<dynamic> _getFilteredResults() {
-//     if (searchQuery.isNotEmpty) {
-//       return users.where((user) => user['id'].toString().contains(searchQuery)).toList();
-//     }
-//     return users;
-//   }
-//
-//   Future<void> _removeUser(int id) async {
-//     //  REST API endpoint to remove user
-//     var response = await http.delete(Uri.parse('http://192.168.1.63:8000/api/users/$id'));
-//     if (response.statusCode == 200) {
-//       setState(() {
-//         users.removeWhere((user) => user['id'] == id);
-//       });
-//     }
-//       else{
-//         print('Failed to delete user: ${response.body}');
-//     }
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       appBar: AppBar(
-//         title: Text('REMOVE USERS'),
-//         titleTextStyle: TextStyle(
-//           fontSize: 17.0,
-//           fontWeight: FontWeight.bold,
-//           color: Colors.white
-//         ),
-//         centerTitle: true,
-//         backgroundColor: Colors.black,
-//         iconTheme: IconThemeData(color: Colors.white),
-//         elevation: 0.0,
-//       ),
-//       body: Container(
-//         decoration: BoxDecoration(
-//           gradient: LinearGradient(
-//             begin: Alignment.topLeft,
-//             end: Alignment.bottomRight,
-//             stops: [0.6, 1.0],
-//             colors: [Colors.black, Colors.pink],
-//           ),
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             children: [
-//               _buildSearchBar(),
-//               SizedBox(height: 10),
-//               Expanded(child: _buildUsersList()),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildSearchBar() {
-//     return TextField(
-//       onChanged: _filterSearchResults,
-//       decoration: InputDecoration(
-//         labelText: 'Search by ID',
-//         fillColor: Colors.white,
-//         filled: true,
-//         border: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(10.0),
-//         ),
-//         prefixIcon: Icon(Icons.search),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildUsersList() {
-//     List<dynamic> filteredUsers = _getFilteredResults();
-//     return ListView.builder(
-//       itemCount: filteredUsers.length,
-//       itemBuilder: (context, index) {
-//         var user = filteredUsers[index];
-//         return Card(
-//           color: Colors.white,
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(15.0), // Rounded corners
-//           ),
-//           elevation: 5.0,
-//           margin: EdgeInsets.symmetric(vertical: 10.0),
-//           child: ListTile(
-//             title: Text('ID: ${user['id']}'),
-//             subtitle: Text('Name: ${user['username']} ${user['email']}'),
-//             trailing: IconButton(
-//               icon: Icon(Icons.delete, color: Colors.red),
-//               onPressed: () => _removeUser(user['id']),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
