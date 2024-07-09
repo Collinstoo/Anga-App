@@ -33,7 +33,7 @@ class _OverViewState extends State<OverView> {
   Future<void> _fetchAirports() async {
     // REST API endpoint to fetch airports
     var airportsResponse = await http.get(
-        Uri.parse('http://192.168.1.63:8000/api/airport/airports'));
+        Uri.parse('http://192.168.1.63:8000/api/admin/airport/airports'));
     if (airportsResponse.statusCode == 200) {
       setState(() {
         airports = jsonDecode(airportsResponse.body);
@@ -46,7 +46,7 @@ class _OverViewState extends State<OverView> {
   Future<void> _fetchAirplanes() async {
     // REST API endpoint to fetch aircrafts
     var aircraftsResponse = await http.get(
-        Uri.parse('http://192.168.1.63:8000/api/airplane/airplanes'));
+        Uri.parse('http://192.168.1.63:8000/api/admin/airplane/airplanes'));
     if (aircraftsResponse.statusCode == 200) {
       setState(() {
         aircrafts = jsonDecode(aircraftsResponse.body);
@@ -267,9 +267,9 @@ class _OverViewState extends State<OverView> {
   String _getItemSubtitle(dynamic item) {
     switch (filter) {
       case 'Airports':
-        return 'Name: ${item['name']},\nID: ${item['airport_id']},\nCountry: ${item['country']},\nCity: ${item['city']}';
+        return 'Name: ${item['airport_name']},\nID: ${item['airport_id']},\nCountry: ${item['country']},\nCity: ${item['city']}';
       case 'Aircrafts':
-        return 'Registration: ${item['registration_number']},\nTotal Seats: ${item['total_seats']},'
+        return 'Registration: ${item['registration_number']},\nID: ${item['airplane_id']},\nTotal Seats: ${item['total_seats']},'
             '\nEconomy Seats: ${item['economy_seats']},\nBusiness Seats: ${item['business_seats']}';
       case 'Tickets':
         return 'Booking ID: ${item['bookingId']},\nPassenger ID: ${item['passengerId']},\n'

@@ -20,7 +20,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
 
   Future<void> _fetchUsers() async {
     //  REST API endpoint to fetchusers
-    var response = await http.get(Uri.parse('http://192.168.1.63:8000/api/users'));
+    var response = await http.get(Uri.parse('http://192.168.1.63:8000/api/admin/user/users'));
     if (response.statusCode == 200) {
       setState(() {
         users = jsonDecode(response.body);
@@ -45,7 +45,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
 
   Future<void> _removeUser(int id) async {
     // REST API endpoint to delete a user
-    var response = await http.delete(Uri.parse('http://192.168.1.63:8000/api/users/$id'));
+    var response = await http.delete(Uri.parse('http://192.168.1.63:8000/api/admin/user/delete/$id'));
     if (response.statusCode == 200) {
       setState(() {
         users.removeWhere((user) => user['id'] == id);
@@ -125,7 +125,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
           child: ListTile(
             title: Text('ID: ${user['id']}'),
             subtitle: Text('Name: ${user['name']},\nEmail: ${user['email']},'
-                ' Address: ${user['address']},\nPhone Number: ${user['phone_number']},\nType: ${user['type']},\nUsername: ${user['username']}'),
+                ' Address: ${user['address']},\nPhone Number: ${user['phone_number']},\nUsername: ${user['username']}'),
             trailing: IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () async {

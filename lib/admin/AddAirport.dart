@@ -14,59 +14,81 @@ class _AddAirportState extends State<AddAirport> {
   final TextEditingController _airportCityController = TextEditingController();
   final TextEditingController _airportIdController = TextEditingController();
 
-
-  //function to add airport
+  // Function to add airport
   void _addAirport() async {
-    String id = _airportIdController.text;
     String name = _airportNameController.text;
     String country = _airportCountryController.text;
     String city = _airportCityController.text;
 
-    //  REST API endpoint to add airport
+    // REST API endpoint to add airport
     var response = await http.post(
-      Uri.parse('http://192.168.1.63:8000/api/airport/airports/create'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/airport/create'),
       body: jsonEncode({
-        'airport_id': id,
-        'name': name,
+        'airport_name': name,
         'country': country,
-        'city': city
+        'city': city,
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+
+    if (response.statusCode == 201) {
+      // Assuming success response code is 200
+      _showSnackbar('Successfully Added');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
   }
 
+  // Function to show snackbar
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
-  //function to delete airport
+  // Function to delete airport
   void _deleteAirport() async {
     String id = _airportIdController.text;
 
-    //  REST API endpoint to delete flight
+    // REST API endpoint to delete airport
     var response = await http.delete(
-      Uri.parse('https://ca919789b23e6c49801b.free.beeceptor.com/api/airport/delete/$id'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/airport/delete/$id'),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+
+    if (response.statusCode == 200) {
+      _showSnackbar('Successfully Deleted');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
   }
 
-  //function to update airport
+  // Function to update airport
   void _updateAirport() async {
     String id = _airportIdController.text;
     String name = _airportNameController.text;
     String country = _airportCountryController.text;
     String city = _airportCityController.text;
 
-    //  REST API endpoint to update airport
-    var response = await http.put(
-      Uri.parse('http://yourapi.com/api/airport/update/$id'), // Update this URL
+    // REST API endpoint to update airport
+    var response = await http.patch(
+      Uri.parse('http://192.168.1.63:8000/api/admin/airport/update/$id'),
       body: jsonEncode({
         'name': name,
         'country': country,
-        'city': city
+        'city': city,
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+
+    if (response.statusCode == 200) {
+      _showSnackbar('Successfully Updated');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
   }
 
   @override
@@ -105,42 +127,39 @@ class _AddAirportState extends State<AddAirport> {
                   title: 'Add Airport',
                   children: [
                     TextField(
-                      controller: _airportIdController,
-                      decoration: InputDecoration(labelText: 'Airport ID',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
-                    ),
-                    TextField(
                       controller: _airportNameController,
-                      decoration: InputDecoration(labelText: 'Airport Name',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Airport Name',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _airportCountryController,
-                      decoration: InputDecoration(labelText: 'Country',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Country',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _airportCityController,
-                      decoration: InputDecoration(labelText: 'City',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'City',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
-                    SizedBox(height: 15.0,),
+                    SizedBox(height: 15.0),
                     ElevatedButton(
                       onPressed: _addAirport,
                       child: Text('ADD'),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Colors.purple),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        backgroundColor: MaterialStateProperty.all(Colors.purple),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -151,63 +170,71 @@ class _AddAirportState extends State<AddAirport> {
                   children: [
                     TextField(
                       controller: _airportIdController,
-                      decoration: InputDecoration(labelText: 'Airport ID',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Airport ID',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
-                    SizedBox(height: 15.0,),
+                    SizedBox(height: 15.0),
                     ElevatedButton(
                       onPressed: _deleteAirport,
-                      child: Text('DELETE',),
+                      child: Text('DELETE'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20.0), // Add space between tiles
+                SizedBox(height: 20.0),
                 _buildExpansionTile(
                   title: 'Update Airport',
                   children: [
                     TextField(
                       controller: _airportIdController,
-                      decoration: InputDecoration(labelText: 'Airport ID',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Airport ID',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _airportNameController,
-                      decoration: InputDecoration(labelText: 'Airport Name',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Airport Name',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _airportCountryController,
-                      decoration: InputDecoration(labelText: 'Country',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Country',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _airportCityController,
-                      decoration: InputDecoration(labelText: 'City',
-                          labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'City',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
-                    SizedBox(height: 15.0,),
+                    SizedBox(height: 15.0),
                     ElevatedButton(
                       onPressed: _updateAirport,
                       child: Text('UPDATE'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -220,10 +247,9 @@ class _AddAirportState extends State<AddAirport> {
     );
   }
 
-  Widget _buildExpansionTile(
-      {required String title, required List<Widget> children}) {
+  Widget _buildExpansionTile({required String title, required List<Widget> children}) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(0.0), // Adjust the radius as needed
+      borderRadius: BorderRadius.circular(0.0),
       child: ExpansionTile(
         title: Text(
           title,
@@ -236,8 +262,7 @@ class _AddAirportState extends State<AddAirport> {
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(
-                  10.0), // Same radius as ClipRRect
+              borderRadius: BorderRadius.circular(10.0),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),

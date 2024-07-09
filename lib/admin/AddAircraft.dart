@@ -10,73 +10,91 @@ class AddAircraft extends StatefulWidget {
 
 class _AddAircraftState extends State<AddAircraft> {
   final TextEditingController _aircraftRegNoController = TextEditingController();
-
   final TextEditingController _aircraftTotalSeatsController = TextEditingController();
-
   final TextEditingController _aircraftEconomySeatsController = TextEditingController();
-
   final TextEditingController _aircraftBusinessSeatsController = TextEditingController();
-
   final TextEditingController _aircraftFirstClassSeatsController = TextEditingController();
+  final TextEditingController _aircraftIdController = TextEditingController();
 
-
-  //function to add aircraft
+  // Function to add aircraft
   void _addAircraft() async {
-    String registration_number = _aircraftRegNoController.text;
-    int total_seats = int.tryParse(_aircraftTotalSeatsController.text) ?? 0;
-    int economy_seats = int.tryParse(_aircraftEconomySeatsController.text) ?? 0;
-    int business_seats = int.tryParse(_aircraftBusinessSeatsController.text) ?? 0;
-    int first_class_seats = int.tryParse(_aircraftFirstClassSeatsController.text) ?? 0;
+    String registrationNumber = _aircraftRegNoController.text;
+    int totalSeats = int.tryParse(_aircraftTotalSeatsController.text) ?? 0;
+    int economySeats = int.tryParse(_aircraftEconomySeatsController.text) ?? 0;
+    int businessSeats = int.tryParse(_aircraftBusinessSeatsController.text) ?? 0;
+    int firstClassSeats = int.tryParse(_aircraftFirstClassSeatsController.text) ?? 0;
 
-    // REST API endpoint for adding aircraft
     var response = await http.post(
-      Uri.parse('http://192.168.1.63:8000/api/airplane/airplanes/create'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/airplane/create'),
       body: jsonEncode({
-        'registration_number': registration_number,
-        'total_seats': total_seats,
-        'economy_seats': economy_seats,
-        'business_seats': business_seats,
-        'first_class_seats': first_class_seats,
+        'registration_number': registrationNumber,
+        'total_seats': totalSeats,
+        'economy_seats': economySeats,
+        'business_seats': businessSeats,
+        'first_class_seats': firstClassSeats,
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+
+    if (response.statusCode == 201) {
+      _showSnackbar('Successfully Added');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
   }
 
-  //function to delete aircraft
+  // Function to delete aircraft
   void _deleteAircraft() async {
-    String registration_number = _aircraftRegNoController.text;
+    String id = _aircraftIdController.text;
 
-    //  REST API endpoint for deleting aircraft
     var response = await http.delete(
-      Uri.parse('http://192.168.1.63:8000/api/airplane/airplanes/$registration_number'), // Update this URL
+      Uri.parse('http://192.168.1.63:8000/api/admin/airplane/delete/$id'),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+
+    if (response.statusCode == 200) {
+      _showSnackbar('Successfully Deleted');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
   }
 
-
-  //function to update aircraft
+  // Function to update aircraft
   void _updateAircraft() async {
-    String registration_number = _aircraftRegNoController.text;
-    int total_seats = int.tryParse(_aircraftTotalSeatsController.text) ?? 0;
-    int economy_seats = int.tryParse(_aircraftEconomySeatsController.text) ?? 0;
-    int business_seats = int.tryParse(_aircraftBusinessSeatsController.text) ?? 0;
-    int first_class_seats = int.tryParse(_aircraftFirstClassSeatsController.text) ?? 0;
+    String id = _aircraftIdController.text;
+    String registrationNumber = _aircraftRegNoController.text;
+    int totalSeats = int.tryParse(_aircraftTotalSeatsController.text) ?? 0;
+    int economySeats = int.tryParse(_aircraftEconomySeatsController.text) ?? 0;
+    int businessSeats = int.tryParse(_aircraftBusinessSeatsController.text) ?? 0;
+    int firstClassSeats = int.tryParse(_aircraftFirstClassSeatsController.text) ?? 0;
 
-
-    // REST API endpoint to update aircraft
-    var response = await http.put(
-      Uri.parse('http://192.168.1.63:8000/api/airplane/airplanes/$registration_number'),
+    var response = await http.patch(
+      Uri.parse('http://192.168.1.63:8000/api/admin/airplane/update/$id'),
       body: jsonEncode({
-        'total_seats': total_seats,
-        'economy_seats': economy_seats,
-        'business_seats': business_seats,
-        'first_class_seats': first_class_seats,
+        'registration_number': registrationNumber,
+        'total_seats': totalSeats,
+        'economy_seats': economySeats,
+        'business_seats': businessSeats,
+        'first_class_seats': firstClassSeats,
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.body);
+
+    if (response.statusCode == 200) {
+      _showSnackbar('Successfully Updated');
+    } else {
+      _showSnackbar('Unsuccessful');
+    }
+  }
+
+  // Function to show snackbar
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -95,8 +113,6 @@ class _AddAircraftState extends State<AddAircraft> {
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0.0,
       ),
-
-
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -118,33 +134,48 @@ class _AddAircraftState extends State<AddAircraft> {
                   children: [
                     TextField(
                       controller: _aircraftRegNoController,
-                      decoration: InputDecoration(labelText: 'Registration Number', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Registration Number',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftTotalSeatsController,
-                      decoration: InputDecoration(labelText: 'Total Seats', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Total Seats',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftEconomySeatsController,
-                      decoration: InputDecoration(labelText: 'Economy Seats', labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Economy Seats',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftBusinessSeatsController,
-                      decoration: InputDecoration(labelText: 'Business Seats',labelStyle: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: 'Business Seats',
+                        labelStyle: TextStyle(color: Colors.black),
                         filled: false,
-                        fillColor: Colors.white),
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftFirstClassSeatsController,
-                      decoration: InputDecoration(labelText: 'First Class Seats',labelStyle: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: 'First Class Seats',
+                        labelStyle: TextStyle(color: Colors.black),
                         filled: false,
-                        fillColor: Colors.white),
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 15),
                     ElevatedButton(
@@ -152,8 +183,7 @@ class _AddAircraftState extends State<AddAircraft> {
                       child: Text('ADD'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.purple),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -163,10 +193,13 @@ class _AddAircraftState extends State<AddAircraft> {
                   title: 'Delete Aircraft',
                   children: [
                     TextField(
-                      controller: _aircraftRegNoController,
-                      decoration: InputDecoration(labelText: 'Registration Number',labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      controller: _aircraftIdController,
+                      decoration: InputDecoration(
+                        labelText: 'Airplane ID',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 15),
                     ElevatedButton(
@@ -174,8 +207,7 @@ class _AddAircraftState extends State<AddAircraft> {
                       child: Text('DELETE'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -185,34 +217,58 @@ class _AddAircraftState extends State<AddAircraft> {
                   title: 'Update Aircraft',
                   children: [
                     TextField(
+                      controller: _aircraftIdController,
+                      decoration: InputDecoration(
+                        labelText: 'Airplane ID',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    TextField(
                       controller: _aircraftRegNoController,
-                      decoration: InputDecoration(labelText: 'Registration Number',labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Registration Number',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftTotalSeatsController,
-                      decoration: InputDecoration(labelText: 'Total Seats',labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Total Seats',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftEconomySeatsController,
-                      decoration: InputDecoration(labelText: 'Economy Seats',labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Economy Seats',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftBusinessSeatsController,
-                      decoration: InputDecoration(labelText: 'Business Seats',labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Business Seats',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     TextField(
                       controller: _aircraftFirstClassSeatsController,
-                      decoration: InputDecoration(labelText: 'First Class Seats',labelStyle: TextStyle(color: Colors.black),
-                          filled: false,
-                          fillColor: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'First Class Seats',
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: false,
+                        fillColor: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 15),
                     ElevatedButton(
@@ -220,8 +276,7 @@ class _AddAircraftState extends State<AddAircraft> {
                       child: Text('UPDATE'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -236,7 +291,7 @@ class _AddAircraftState extends State<AddAircraft> {
 
   Widget _buildExpansionTile({required String title, required List<Widget> children}) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(0.0), // Adjust the radius as needed
+      borderRadius: BorderRadius.circular(0.0),
       child: ExpansionTile(
         title: Text(
           title,
@@ -249,7 +304,7 @@ class _AddAircraftState extends State<AddAircraft> {
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0), // Same radius as ClipRRect
+              borderRadius: BorderRadius.circular(10.0),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -263,7 +318,7 @@ class _AddAircraftState extends State<AddAircraft> {
         collapsedBackgroundColor: Colors.white,
         tilePadding: EdgeInsets.symmetric(horizontal: 16.0),
         childrenPadding: EdgeInsets.zero,
-        initiallyExpanded: true, // Expand the tile initially
+        initiallyExpanded: true,
       ),
     );
   }

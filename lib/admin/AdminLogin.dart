@@ -14,7 +14,7 @@ class AdminLogin extends StatefulWidget {
 }
 
 class _AdminLoginState extends State<AdminLogin> {
-  final TextEditingController _usernameController = TextEditingController();
+  // final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -24,28 +24,28 @@ class _AdminLoginState extends State<AdminLogin> {
       return;
     }
 
-    final String username = _usernameController.text;
+    // final String username = _usernameController.text;
     final String email = _emailController.text;
     final String password = _passwordController.text;
 
 
     //API endpoint
-    final url = Uri.parse('http://192.168.1.63:8000/admin/login');
 
+    final url = Uri.parse('http://192.168.1.63:8000/api/admin/login');
 
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'username': username,
+          // 'username': username,
           'email': email,
           'password': password,
         }),
       );
 
       // Debug print to check the request payload
-      print('Request payload: ${jsonEncode({'username': username, 'email': email, 'password': password})}');
+      print('Request payload: ${jsonEncode({'email': email, 'password': password})}');
 
       // Debug print to check the response status code and body
       print('Response status: ${response.statusCode}');
@@ -122,19 +122,19 @@ class _AdminLoginState extends State<AdminLogin> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextFormField(
-                          controller: _usernameController,
-                          decoration: const InputDecoration(
-                            suffixIcon: Icon(Icons.check, color: Colors.grey),
-                            label: Text('Username', style: TextStyle(color: Colors.black)),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a username';
-                            }
-                            return null;
-                          },
-                        ),
+                        // TextFormField(
+                        //   controller: _usernameController,
+                        //   decoration: const InputDecoration(
+                        //     suffixIcon: Icon(Icons.check, color: Colors.grey),
+                        //     label: Text('Username', style: TextStyle(color: Colors.black)),
+                        //   ),
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return 'Please enter a username';
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
                         TextFormField(
                           controller: _emailController,
                           decoration: const InputDecoration(
@@ -184,7 +184,7 @@ class _AdminLoginState extends State<AdminLogin> {
                             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                           ),
                           child: const Text(
-                            'ROOT LOGIN',
+                            'LOGIN',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
