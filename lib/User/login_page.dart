@@ -14,8 +14,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false; // Loading indicator
 
+
   Future<void> loginUser(String email, String password) async {
-    final url = Uri.parse('http://192.168.1.63:8000/api/login'); // Replace with your API endpoint
+    final url = Uri.parse('http://192.168.1.63:8000/api/auth/login');
 
     try {
       final response = await http.post(

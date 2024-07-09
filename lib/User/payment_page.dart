@@ -1,6 +1,9 @@
 import 'package:flight_booking_application/User/contactus_page.dart';
 import 'package:flight_booking_application/User/seatbooking_page.dart';
 import 'package:flutter/material.dart';
+
+import '../admin/WelcomeScreen.dart';
+import 'Ticketing_page.dart';
 // import 'package:flight_booking_application/book_flight_page.dart';
 // import 'package:flight_booking_application/ticketing_page.dart';
 
@@ -71,10 +74,10 @@ class PaymentPage extends StatelessWidget {
               leading: Icon(Icons.airplane_ticket),
               title: Text('Ticketing'),
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => TicketingPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TicketingPage()),
+                );
               },
             ),
             ListTile(
@@ -84,6 +87,17 @@ class PaymentPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ContactUsPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_sharp),
+              title: Text('LOG OUT'),
+
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()),
                 );
               },
             ),

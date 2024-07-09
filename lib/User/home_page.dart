@@ -1,10 +1,12 @@
-import 'package:flight_booking_application/User/contactus_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../admin/WelcomeScreen.dart';
+import 'flight.dart';
 import 'seatbooking_page.dart';
 import 'payment_page.dart';
+import 'contactus_page.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -17,38 +19,59 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController departureDateController = TextEditingController();
-  final TextEditingController returnDateController = TextEditingController();
   int adults = 1;
   int children = 0;
-  List<String> cities = [];
+  List<String> cities = ['Kericho Airport', 'JKIA', 'City 3']; // Placeholder cities
   String? fromCity;
   String? toCity;
-  bool isLoadingCities = false;
+  bool isLoading = false;
+  List<Flight> flights = [];
 
-  @override
-  void initState() {
-    super.initState();
-    fetchCities();
-  }
+  Future<void> searchFlights() async {
+    if (fromCity == null || toCity == null) {
+      // Ensure both cities are selected before searching
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Missing Information'),
+          content: Text('Please select both departure and arrival cities.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
 
-  Future<void> fetchCities() async {
     setState(() {
-      isLoadingCities = true;
+      isLoading = true;
     });
 
-    final url = Uri.parse('http://your_api_endpoint/cities'); // Replace with your API endpoint
-    final response = await http.get(url);
+    final String apiUrl = 'http://192.168.1.63:8000/api/flights/flights';
+    final Uri uri = Uri.parse('$apiUrl?from=$fromCity&to=$toCity&departureDate=${departureDateController.text}&adults=$adults&children=$children');
 
-    if (response.statusCode == 200) {
+    try {
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        Iterable list = json.decode(response.body);
+        setState(() {
+          flights = list.map((model) => Flight.fromJson(model)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load flights');
+      }
+    } catch (e) {
+      print('Error: $e');
       setState(() {
-        cities = List<String>.from(jsonDecode(response.body));
-        isLoadingCities = false;
+        isLoading = false;
       });
-    } else {
-      setState(() {
-        isLoadingCities = false;
-      });
-      throw Exception('Failed to load cities');
     }
   }
 
@@ -64,7 +87,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xFF800000), // Maroon color
+                color: Color(0xFF800000),
               ),
               child: Text(
                 'Menu',
@@ -74,7 +97,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-
             ListTile(
               leading: Icon(Icons.event_seat),
               title: Text('Seat Booking'),
@@ -96,13 +118,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.airplane_ticket),
-              title: Text('Ticketing'),
-              onTap: () {
-                // Navigate to ticketing page
-              },
-            ),
-            ListTile(
               leading: Icon(Icons.contact_page),
               title: Text('Contact Us'),
               onTap: () {
@@ -110,7 +125,16 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(builder: (context) => ContactUsPage()),
                 );
-                // Navigate to contact us page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_sharp),
+              title: Text('LOG OUT'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                );
               },
             ),
           ],
@@ -127,30 +151,13 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF800000), // Maroon text color
+                  color: Color(0xFF800000), 
                 ),
               ),
               SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.notifications),
-                    onPressed: () {
-                      // Handle notifications tap
-                    },
-                  ),
-                ],
-              ),
               Center(
                 child: Column(
                   children: [
-                    Image.asset(
-                      'assets/pla.jpg',
-                      height: 200.0,
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(height: 20),
                     ToggleButtons(
                       children: [Text('One Way'), Text('Round Trip')],
                       isSelected: [true, false],
@@ -159,9 +166,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     SizedBox(height: 20),
-                    isLoadingCities
-                        ? CircularProgressIndicator()
-                        : DropdownButtonFormField<String>(
+                    DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'From',
                         prefixIcon: Icon(Icons.flight_takeoff, color: Color(0xFF800000)),
@@ -182,9 +187,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     SizedBox(height: 20),
-                    isLoadingCities
-                        ? CircularProgressIndicator()
-                        : DropdownButtonFormField<String>(
+                    DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: 'To',
                         prefixIcon: Icon(Icons.flight_land, color: Color(0xFF800000)),
@@ -231,63 +234,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextField(
-                      controller: returnDateController,
-                      readOnly: true,
-                      onTap: () async {
-                        final DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime.now().add(Duration(days: 365)),
-                        );
-                        if (pickedDate != null) {
-                          setState(() {
-                            returnDateController.text =
-                            "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
-                          });
-                        }
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Return',
-                        prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF800000)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Class',
-                        prefixIcon: Icon(Icons.class_, color: Color(0xFF800000)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      items: <String>['Economy', 'Business', 'Premier', 'VIP']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (_) {
-                        // Handle dropdown change
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    PassengerDropdown(
-                      adults: adults,
-                      children: children,
-                      onChanged: (passengerData) {
-                        setState(() {
-                          adults = passengerData['adults']!;
-                          children = passengerData['children']!;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 20),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF800000), // Maroon button color
@@ -297,11 +243,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SeatBookingPage()),
-                        );
-                        // Handle search flights
+                        searchFlights();
                       },
                       child: Text(
                         'Search Flights',
@@ -310,6 +252,23 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    if (isLoading)
+                      Center(child: CircularProgressIndicator()),
+                    if (flights.isNotEmpty)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: flights.length,
+                        itemBuilder: (context, index) {
+                          Flight flight = flights[index];
+                          return ListTile(
+                            title: Text(flight.airline),
+                            subtitle: Text(
+                              '${flight.flightNumber} - ${flight.departureTime} to ${flight.arrivalTime}',
+                            ),
+                            trailing: Text('\$${flight.price.toStringAsFixed(2)}'),
+                          );
+                        },
+                      ),
                   ],
                 ),
               ),
@@ -339,7 +298,6 @@ class PassengerDropdown extends StatefulWidget {
 class _PassengerDropdownState extends State<PassengerDropdown> {
   late int adults;
   late int children;
-  bool dropdownOpened = false;
 
   @override
   void initState() {
@@ -348,118 +306,51 @@ class _PassengerDropdownState extends State<PassengerDropdown> {
     children = widget.children;
   }
 
-  void toggleDropdown() {
-    setState(() {
-      dropdownOpened = !dropdownOpened;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        GestureDetector(
-          onTap: toggleDropdown,
-          child: InputDecorator(
-            decoration: InputDecoration(
-              labelText: 'Passengers',
-              prefixIcon: Icon(Icons.person, color: Color(0xFF800000)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
+        Column(
+          children: [
+            Text('Adults'),
+            DropdownButton<int>(
+              value: adults,
+              items: List.generate(10, (index) => index + 1)
+                  .map((value) => DropdownMenuItem<int>(
+                value: value,
+                child: Text(value.toString()),
+              ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  adults = value!;
+                  widget.onChanged({'adults': adults, 'children': children});
+                });
+              },
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Adults: $adults, Children: $children'),
-                Icon(dropdownOpened ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-              ],
-            ),
-          ),
+          ],
         ),
-        if (dropdownOpened)
-          Container(
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Color(0xFF800000)),
-              borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 5.0,
-                  offset: Offset(0, 2),
-                ),
-              ],
+        Column(
+          children: [
+            Text('Children'),
+            DropdownButton<int>(
+              value: children,
+              items: List.generate(10, (index) => index)
+                  .map((value) => DropdownMenuItem<int>(
+                value: value,
+                child: Text(value.toString()),
+              ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  children = value!;
+                  widget.onChanged({'adults': adults, 'children': children});
+                });
+              },
             ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Adults', style: TextStyle(fontSize: 16)),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.remove_circle, color: Color(0xFF800000)),
-                          onPressed: () {
-                            if (adults > 1) {
-                              setState(() {
-                                adults--;
-                              });
-                              widget.onChanged({'adults': adults, 'children': children});
-                            }
-                          },
-                        ),
-                        Text('$adults', style: TextStyle(fontSize: 16)),
-                        IconButton(
-                          icon: Icon(Icons.add_circle, color: Color(0xFF800000)),
-                          onPressed: () {
-                            setState(() {
-                              adults++;
-                            });
-                            widget.onChanged({'adults': adults, 'children': children});
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Children', style: TextStyle(fontSize: 16)),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.remove_circle, color: Color(0xFF800000)),
-                          onPressed: () {
-                            if (children > 0) {
-                              setState(() {
-                                children--;
-                              });
-                              widget.onChanged({'adults': adults, 'children': children});
-                            }
-                          },
-                        ),
-                        Text('$children', style: TextStyle(fontSize: 16)),
-                        IconButton(
-                          icon: Icon(Icons.add_circle, color: Color(0xFF800000)),
-                          onPressed: () {
-                            setState(() {
-                              children++;
-                            });
-                            widget.onChanged({'adults': adults, 'children': children});
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          ],
+        ),
       ],
     );
   }
