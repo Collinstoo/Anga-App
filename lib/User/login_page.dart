@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'home_page.dart';
+import 'session_manager.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +15,24 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false; // Loading indicator
 
+  @override
+  void initState() {
+    super.initState();
+    _checkSession();
+  }
+
+  void _checkSession() async {
+    final username = await SessionManager.getUser();
+    if (username != null) {
+      // Navigate to home page if user is already logged in
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(username: username),
+        ),
+      );
+    }
+  }
 
   Future<void> loginUser(String email, String password) async {
     final url = Uri.parse('http://192.168.1.63:8000/api/auth/login');
@@ -32,10 +51,9 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         var user = jsonDecode(response.body);
-        print(response.body);
-
         String username = user['name'] ?? '';
-        print(username);// Ensure a non-null value
+        await SessionManager.saveUser(username);
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomePage(username: username)),
@@ -61,29 +79,27 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.black, // Dark maroon background color
       appBar: AppBar(
-          titleTextStyle: GoogleFonts.albertSans(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-          centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.white),
-          title: Text('LOGIN'),
-          backgroundColor: Colors.pink // Dark maroon app bar color
+        titleTextStyle: GoogleFonts.albertSans(
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('LOGIN'),
+        backgroundColor: Colors.pink, // Dark maroon app bar color
       ),
       body: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  Colors.black,
-                  Colors.pink,
-                ]
-
-            )
+          gradient: LinearGradient(
+            colors: [
+              Colors.black,
+              Colors.pink,
+            ],
+          ),
         ),
         child: Center(
           child: SingleChildScrollView(
@@ -161,10 +177,6 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(fontSize: 18.0),
                       ),
                     ),
-
-
-
-
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -191,8 +203,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-
-
     );
   }
 }
