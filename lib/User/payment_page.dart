@@ -60,16 +60,16 @@ class PaymentPage extends StatelessWidget {
                 // );
               },
             ),
-            ListTile(
-              leading: Icon(Icons.event_seat),
-              title: Text('Seat Booking'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SeatBookingPage()),
-                );
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(Icons.event_seat),
+            //   title: Text('Seat Booking'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => SeatBookingPage(flight: null,)),
+            //     );
+            //   },
+            // ),
             ListTile(
               leading: Icon(Icons.airplane_ticket),
               title: Text('Ticketing'),

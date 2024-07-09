@@ -56,16 +56,16 @@ class ContactUsPage extends StatelessWidget {
                 // );
               },
             ),
-            ListTile(
-              leading: Icon(Icons.event_seat),
-              title: Text('Seat Booking'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SeatBookingPage()),
-                );
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(Icons.event_seat),
+            //   title: Text('Seat Booking'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => SeatBookingPage()),
+            //     );
+            //   },
+            // ),
             ListTile(
               leading: Icon(Icons.payment),
               title: Text('Payment'),
