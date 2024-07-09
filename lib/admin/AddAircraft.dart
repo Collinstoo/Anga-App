@@ -25,7 +25,7 @@ class _AddAircraftState extends State<AddAircraft> {
     int firstClassSeats = int.tryParse(_aircraftFirstClassSeatsController.text) ?? 0;
 
     var response = await http.post(
-      Uri.parse('http://192.168.1.63:8000/api/airplane/create'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/airplane/create'),
       body: jsonEncode({
         'registration_number': registrationNumber,
         'total_seats': totalSeats,
@@ -48,7 +48,7 @@ class _AddAircraftState extends State<AddAircraft> {
     String id = _aircraftIdController.text;
 
     var response = await http.delete(
-      Uri.parse('http://192.168.1.63:8000/api/airplane/delete/$id'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/airplane/delete/$id'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -68,8 +68,8 @@ class _AddAircraftState extends State<AddAircraft> {
     int businessSeats = int.tryParse(_aircraftBusinessSeatsController.text) ?? 0;
     int firstClassSeats = int.tryParse(_aircraftFirstClassSeatsController.text) ?? 0;
 
-    var response = await http.put(
-      Uri.parse('http://192.168.1.63:8000/api/airplane/update/$id'),
+    var response = await http.patch(
+      Uri.parse('http://192.168.1.63:8000/api/admin/airplane/update/$id'),
       body: jsonEncode({
         'registration_number': registrationNumber,
         'total_seats': totalSeats,

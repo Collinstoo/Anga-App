@@ -22,7 +22,7 @@ class _AddAirportState extends State<AddAirport> {
 
     // REST API endpoint to add airport
     var response = await http.post(
-      Uri.parse('http://192.168.1.63:8000/api/airport/create'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/airport/create'),
       body: jsonEncode({
         'airport_name': name,
         'country': country,
@@ -55,7 +55,7 @@ class _AddAirportState extends State<AddAirport> {
 
     // REST API endpoint to delete airport
     var response = await http.delete(
-      Uri.parse('http://192.168.1.63:8000/api/airport/delete/$id'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/airport/delete/$id'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -74,8 +74,8 @@ class _AddAirportState extends State<AddAirport> {
     String city = _airportCityController.text;
 
     // REST API endpoint to update airport
-    var response = await http.put(
-      Uri.parse('http://192.168.1.63:8000/api/airport/update/$id'),
+    var response = await http.patch(
+      Uri.parse('http://192.168.1.63:8000/api/admin/airport/update/$id'),
       body: jsonEncode({
         'name': name,
         'country': country,

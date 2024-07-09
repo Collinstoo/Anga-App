@@ -30,7 +30,7 @@ class _AdminLoginState extends State<AdminLogin> {
 
 
     //API endpoint
-    final url = Uri.parse('http://192.168.1.63:8000/admin/login');
+    final url = Uri.parse('http://192.168.1.63:8000/api/admin/login');
 
 
     try {

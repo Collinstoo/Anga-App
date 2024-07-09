@@ -31,7 +31,7 @@ class _AddFlightState extends State<AddFlight> {
 
     //  REST API endpoint for add flight
     var response = await http.post(
-      Uri.parse('http://192.168.1.63:8000/api/flights/create'),
+      Uri.parse('http://192.168.1.63:8000/api/admin/wing/create'),
       body: jsonEncode({
         'flight_number': flightNumber,
         'departure_date_time': departure_date_Time,
@@ -64,7 +64,7 @@ class _AddFlightState extends State<AddFlight> {
 
     //  REST API endpoint for deleting flight
     var response = await http.delete(
-      Uri.parse('http://yourapi.com/api/flight/$flightNumber'),
+      Uri.parse('http://yourapi.com/api/admin/wing/delete/$flightNumber'),
       headers: {'Content-Type': 'application/json'},
     );
     print(response.body);
@@ -79,8 +79,8 @@ class _AddFlightState extends State<AddFlight> {
     String arrivalAirport = _arrivalAirportController.text;
 
     //  REST API endpoint for updating flight
-    var response = await http.put(
-      Uri.parse('http://yourapi.com/api/flight/$flightNumber'),
+    var response = await http.patch(
+      Uri.parse('http://yourapi.com/api/admin/wing/update/$flightNumber'),
       body: jsonEncode({
         'departure_date_time': departure_date_Time,
         'arrival_date_time': arrival_date_Time,

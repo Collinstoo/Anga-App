@@ -33,7 +33,7 @@ class _OverViewState extends State<OverView> {
   Future<void> _fetchAirports() async {
     // REST API endpoint to fetch airports
     var airportsResponse = await http.get(
-        Uri.parse('http://192.168.1.63:8000/api/airport/airports'));
+        Uri.parse('http://192.168.1.63:8000/api/admin/airport/airports'));
     if (airportsResponse.statusCode == 200) {
       setState(() {
         airports = jsonDecode(airportsResponse.body);
@@ -46,7 +46,7 @@ class _OverViewState extends State<OverView> {
   Future<void> _fetchAirplanes() async {
     // REST API endpoint to fetch aircrafts
     var aircraftsResponse = await http.get(
-        Uri.parse('http://192.168.1.63:8000/api/airplane/airplanes'));
+        Uri.parse('http://192.168.1.63:8000/api/admin/airplane/airplanes'));
     if (aircraftsResponse.statusCode == 200) {
       setState(() {
         aircrafts = jsonDecode(aircraftsResponse.body);
