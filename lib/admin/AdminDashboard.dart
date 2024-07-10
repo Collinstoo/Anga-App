@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'AddAirport.dart';
 import 'AddAircraft.dart';
 import 'AddFlight.dart';
 import 'Overview.dart';
 import 'RemoveUsers.dart';
+import 'AdminLogin.dart';
+// import 'package:flutter_any_logo/flutter_logo.dart';
+import 'package:solar_icons/solar_icons.dart';
+import 'package:ionicons/ionicons.dart';
 
 class AdminDashboard extends StatelessWidget {
   @override
@@ -29,12 +34,18 @@ class AdminDashboard extends StatelessWidget {
           backgroundColor: Colors.transparent,
           centerTitle: true,
           iconTheme: IconThemeData(color: Colors.white),
+          automaticallyImplyLeading: false,
           elevation: 0.0,
           actions: [
             IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/admin-login');
+              icon: Icon(SolarIconsOutline.logout_3),
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminLogin()),
+                );
               },
             ),
           ],
@@ -58,15 +69,15 @@ class AdminDashboard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildSquareButton(context, 'Airport', Icons.location_on, AddAirport()),
-                    _buildSquareButton(context, 'Aircraft', Icons.airplanemode_active, AddAircraft()),
+                    _buildSquareButton(context, 'Airport', Ionicons.location_outline, AddAirport()),
+                    _buildSquareButton(context, 'Aircraft', Ionicons.airplane_outline, AddAircraft()),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildSquareButton(context, 'Flight', Icons.flight_takeoff, AddFlight()),
-                    _buildSquareButton(context, 'Users', Icons.person, RemoveUsers()),
+                    _buildSquareButton(context, 'Flight', SolarIconsOutline.traffic, AddFlight()),
+                    _buildSquareButton(context, 'Users', Ionicons.person_outline, RemoveUsers()),
                   ],
                 ),
                 Padding(
@@ -74,7 +85,7 @@ class AdminDashboard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _buildSquareButton(context, 'Overview', Icons.edit, OverView()),
+                      _buildSquareButton(context, 'Overview', SolarIconsOutline.penNewRound, OverView()),
                     ],
                   ),
                 ),

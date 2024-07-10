@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'User/contactus_page.dart';
+import 'Wrapper.dart';
 import 'admin/WelcomeScreen.dart';
 // import 'package:';
-
 
 
 
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         // '/home': (context) => HomePage(username: 'User'), // Dummy userName for route setup
         '/contact': (context) => ContactUsPage(),
       },
-      home: const WelcomeScreen(),
+      home: const Wrapper(),
 
     );
   }

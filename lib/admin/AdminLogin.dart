@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flight_booking_application/User/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'AdminDashboard.dart';
 import 'WelcomeScreen.dart';
 
@@ -41,6 +43,9 @@ class _AdminLoginState extends State<AdminLogin> {
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userType', 'admin'); // Save user type as 'admin'
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => AdminDashboard()),
@@ -174,7 +179,7 @@ class _AdminLoginState extends State<AdminLogin> {
                             onTap: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                                MaterialPageRoute(builder: (context) =>  LoginPage()),
                               );
                             },
                             child: const Align(
