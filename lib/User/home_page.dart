@@ -8,6 +8,7 @@ import 'flight.dart';
 import 'seatbooking_page.dart';
 import 'payment_page.dart';
 import 'contactus_page.dart';
+import 'your_flight_page.dart'; // Import your custom YourFlightPage
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -19,16 +20,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> airports = [];
-  String? selectedFromAirport;
-  String? selectedToAirport;
+  List<String> cities = [];
+  String? selectedFromCity;
+  String? selectedToCity;
   bool isLoading = false;
-  List<Flight> flights = [];
+  List flights = [];
 
   @override
   void initState() {
     super.initState();
-    fetchAirports();
+    fetchCities();
     checkSession(); // Check for an existing session
   }
 
@@ -42,27 +43,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> fetchAirports() async {
-    final String apiUrl = 'http://192.168.1.63:8000/api/flights/flights';
+  Future<void> fetchCities() async {
+    final String apiUrl = 'http://192.168.1.63:8000/api/flights/filter';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
-        Set<String> airportSet = Set<String>(); // Using a Set to avoid duplicate entries
+        Set<String> citySet = Set<String>(); // Using a Set to avoid duplicate entries
 
-        // Extract Arrival_Airport and Departure_Airport from each flight entry
+        // Extract cities from each flight entry
         for (var flight in jsonData) {
-          airportSet.add(flight['Arrival_Airport'].toString());
-          airportSet.add(flight['Departure_Airport'].toString());
+          citySet.add(flight['arrival_city'].toString());
+          citySet.add(flight['departure_city'].toString());
+
         }
 
         setState(() {
-          airports = airportSet.toList();
+          cities = citySet.toList();
         });
       } else {
-        throw Exception('Failed to load airports');
+        throw Exception('Failed to load cities');
       }
     } catch (e) {
       print('Error: $e');
@@ -70,13 +72,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> searchFlights() async {
-    if (selectedFromAirport == null || selectedToAirport == null) {
-      // Show an error dialog if either airport is not selected
+    if (selectedFromCity == null || selectedToCity == null) {
+      // Show an error dialog if either city is not selected
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Missing Information'),
-          content: Text('Please select both departure and arrival airports.'),
+          content: Text('Please select both departure and arrival cities.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -94,31 +96,54 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
 
-    final String apiUrl = 'http://192.168.1.63:8000/api/flights/filter_flights';
-    final Uri uri = Uri.parse('$apiUrl?from=$selectedFromAirport&to=$selectedToAirport');
+    final String apiUrl = 'http://192.168.1.63:8000/api/flights/filter';
+    final Uri uri = Uri.parse('$apiUrl?from=$selectedFromCity&to=$selectedToCity');
 
     try {
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {
-        print(response.body);
         final jsonData = json.decode(response.body);
+        print(jsonData);
+        // List<Flight> fetchedFlights = [];
+
+        // for (var flightJson in jsonData['flights']) {
+        //   Flight flight = Flight(
+        //     airplaneId: flightJson['airplane_id'],
+        //     arrivalAirport: flightJson['arrival_airport'],
+        //     arrivalAirportName: flightJson['arrival_airport_name'],
+        //     arrivalCity: flightJson['arrival_city'],
+        //     arrivalCountry: flightJson['arrival_country'],
+        //     arrivalDateTime: DateTime.parse(flightJson['arrival_date_time']),
+        //     capacity: flightJson['capacity'],
+        //     departureAirport: flightJson['departure_airport'],
+        //     departureAirportName: flightJson['departure_airport_name'],
+        //     departureCity: flightJson['departure_city'],
+        //     departureCountry: flightJson['departure_country'],
+        //     departureDateTime: DateTime.parse(flightJson['departure_date_time']),
+        //     flightId: flightJson['flight_id'],
+        //     flightNumber: flightJson['flight_number'],
+        //     price: flightJson['price'].toDouble(),
+        //   );
+        //
+        //   fetchedFlights.add(flight);
+        // }
+
         setState(() {
-          flights = List<Flight>.from(jsonData['flights'].map((x) => Flight.fromJson(x)));
+          flights = jsonData;
+          // flights = fetchedFlights;
           isLoading = false;
         });
 
-        // Automatically navigate to SeatBookingPage with the first available flight
-        if (flights.isNotEmpty) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SeatBookingPage(
-                flight: flights[0], // Pass the first available flight
-              ),
+        // Navigate to YourFlightPage with filtered flights
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => YourFlightPage(
+              flights: flights,
             ),
-          );
-        }
+          ),
+        );
       } else {
         throw Exception('Failed to load flights');
       }
@@ -129,7 +154,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,15 +244,15 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      items: airports.map((String airport) {
+                      items: cities.map((String city) {
                         return DropdownMenuItem<String>(
-                          value: airport,
-                          child: Text(airport),
+                          value: city,
+                          child: Text(city),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedFromAirport = newValue;
+                          selectedFromCity = newValue;
                         });
                       },
                     ),
@@ -241,15 +265,15 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      items: airports.map((String airport) {
+                      items: cities.map((String city) {
                         return DropdownMenuItem<String>(
-                          value: airport,
-                          child: Text(airport),
+                          value: city,
+                          child: Text(city),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedToAirport = newValue;
+                          selectedToCity = newValue;
                         });
                       },
                     ),
@@ -271,24 +295,52 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 18.0,
                         ),
                       ),
+
                     ),
                     if (isLoading)
-                      Center(child: CircularProgressIndicator()),
-                    if (flights.isNotEmpty)
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: flights.length,
-                        itemBuilder: (context, index) {
-                          Flight flight = flights[index];
-                          return ListTile(
-                            title: Text(flight.airline),
-                            subtitle: Text(
-                              '${flight.flightNumber} - ${flight.departureAirport} to ${flight.arrivalAirport}\n${flight.departureTime} to ${flight.arrivalTime}',
-                            ),
-                            trailing: Text('\$${flight.price.toStringAsFixed(2)}'),
-                          );
-                        },
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: CircularProgressIndicator(),
                       ),
+                    // if (isLoading)
+                    //   Center(child: CircularProgressIndicator()),
+                    // if (flights.isNotEmpty)
+                    //   Text('${flights}')
+                      // ListView.builder(
+                      //   shrinkWrap: true,
+                      //   itemCount: flights.length,
+                      //   itemBuilder: (context, index) {
+                      //     Flight flight = flights[index];
+                      //     return ListTile(
+                      //       title: Text(flight.flightNumber),
+                      //       subtitle: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Text('${flight.departureCity} to ${flight.arrivalCity}'),
+                      //           Text(
+                      //             'Departure: ${flight.departureDateTime.toString()}',
+                      //             style: TextStyle(fontStyle: FontStyle.italic),
+                      //           ),
+                      //           Text(
+                      //             'Arrival: ${flight.arrivalDateTime.toString()}',
+                      //             style: TextStyle(fontStyle: FontStyle.italic),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       trailing: Text('\$${flight.price.toStringAsFixed(2)}'),
+                      //       // onTap: () {
+                      //       //   // Navigator.push(
+                      //       //   //   context,
+                      //       //   //   MaterialPageRoute(
+                      //       //   //     builder: (context) => SeatBookingPage(
+                      //       //   //       flight: flight,
+                      //       //   //     ),
+                      //       //   //   ),
+                      //       //   );
+                      //       // },
+                      //     );
+                      //   },
+                      // ),
                   ],
                 ),
               ),
