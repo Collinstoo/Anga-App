@@ -37,8 +37,11 @@ class _AddAircraftState extends State<AddAircraft> {
     );
 
     if (response.statusCode == 201) {
-      _showSnackbar('Successfully Added');
-    } else {
+      _showSnackbar('Successfully Added Aircraft');
+    } else if(response.statusCode == 400) {
+      _showSnackbar('Invalid Input or Missing Required Fields');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
@@ -53,8 +56,13 @@ class _AddAircraftState extends State<AddAircraft> {
     );
 
     if (response.statusCode == 200) {
-      _showSnackbar('Successfully Deleted');
-    } else {
+      _showSnackbar('Successfully Deleted Aircraft');
+    } else if(response.statusCode == 404) {
+      _showSnackbar('Airplane Not Found');
+    } else if(response.statusCode == 500) {
+      _showSnackbar('Internal Server Error');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
@@ -81,8 +89,13 @@ class _AddAircraftState extends State<AddAircraft> {
     );
 
     if (response.statusCode == 200) {
-      _showSnackbar('Successfully Updated');
-    } else {
+      _showSnackbar('Successfully Updated Aircraft');
+    } else if(response.statusCode == 400) {
+      _showSnackbar('Invalid Input or Missing Required Fields');
+    } else if(response.statusCode == 404) {
+      _showSnackbar('Airplane Not Found');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
@@ -135,7 +148,7 @@ class _AddAircraftState extends State<AddAircraft> {
                     TextField(
                       controller: _aircraftRegNoController,
                       decoration: InputDecoration(
-                        labelText: 'Registration Number',
+                        labelText: 'Registration Number(KQXXX)',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,
@@ -144,7 +157,7 @@ class _AddAircraftState extends State<AddAircraft> {
                     TextField(
                       controller: _aircraftTotalSeatsController,
                       decoration: InputDecoration(
-                        labelText: 'Total Seats',
+                        labelText: 'Total Seats(000)',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,
@@ -228,7 +241,7 @@ class _AddAircraftState extends State<AddAircraft> {
                     TextField(
                       controller: _aircraftRegNoController,
                       decoration: InputDecoration(
-                        labelText: 'Registration Number',
+                        labelText: 'Registration Number(KQXXX)',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,
@@ -237,7 +250,7 @@ class _AddAircraftState extends State<AddAircraft> {
                     TextField(
                       controller: _aircraftTotalSeatsController,
                       decoration: InputDecoration(
-                        labelText: 'Total Seats',
+                        labelText: 'Total Seats(000)',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,

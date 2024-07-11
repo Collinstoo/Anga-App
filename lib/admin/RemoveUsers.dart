@@ -51,7 +51,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
     if (response.statusCode == 200) {
       setState(() {
         users.removeWhere((user) => user['id'] == id);
-        print(response.body);
+        print('Successfully Deleted User:${response.body}');
       });
     } else {
       print('Failed to delete user: ${response.body}');

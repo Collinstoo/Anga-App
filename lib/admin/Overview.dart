@@ -270,7 +270,7 @@ class _OverViewState extends State<OverView> {
         return 'Name: ${item['airport_name']},\nID: ${item['airport_id']},\nCountry: ${item['country']},\nCity: ${item['city']}';
       case 'Aircrafts':
         return 'Registration: ${item['registration_number']},\nID: ${item['airplane_id']},\nTotal Seats: ${item['total_seats']},'
-            '\nEconomy Seats: ${item['economy_seats']},\nBusiness Seats: ${item['business_seats']}';
+            '\nEconomy Seats: ${item['economy_seats']},\nBusiness Seats: ${item['business_seats']},\nFirst Class Seats: ${item['first_class_seats']}';
       case 'Tickets':
         return 'Booking ID: ${item['bookingId']},\nPassenger ID: ${item['passengerId']},\n'
             'Class Type: ${item['classType']},\nFlight ID: ${item['flightId']},\nIssue Date: ${item['issueDate']},\n'
@@ -287,7 +287,7 @@ class _OverViewState extends State<OverView> {
             'Status: ${item['status']},\nUser ID: ${item['userId']},'
             '\nCreated At: ${item['createdAt']},\nUpdated At: ${item['updatedAt']}';
       case 'Flights':
-        return 'Aircraft Registration Number: ${item['Flight_Number']},\nDeparture Airport: ${item['Departure_Airport']},\n'
+        return 'Flight Number/ID: ${item['FlightID']},\nAircraft Registration Number: ${item['Flight_Number']},\nDeparture Airport: ${item['Departure_Airport']},\n'
             'Arrival Airport: ${item['Arrival_Airport']},\nPrice: ${item['Price']},\nCapacity: ${item['Capacity']},\n'
             'Arrival Date and Time: ${item['Arrival_Date_Time']},\nDeparture Date and Time: ${item['Departure_Date_Time']}';
       default:

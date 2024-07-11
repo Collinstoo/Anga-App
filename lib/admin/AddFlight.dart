@@ -38,8 +38,13 @@ class _AddFlightState extends State<AddFlight> {
     );
 
     if (response.statusCode == 201) {
-      _showSnackbar('Successfully Added');
-    } else {
+      _showSnackbar('Successfully Added Flight');
+    } else if(response.statusCode == 400) {
+      _showSnackbar('Missing Required Fields or Incorrect Format');
+    } else if(response.statusCode == 404) {
+      _showSnackbar('Airplane not found');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
@@ -66,8 +71,11 @@ class _AddFlightState extends State<AddFlight> {
     // print(response.body);
 
     if (response.statusCode == 200) {
-      _showSnackbar('Successfully Deleted');
-    } else {
+      _showSnackbar('Successfully Deleted Flight');
+    } else if(response.statusCode == 404) {
+      _showSnackbar('Flight Not Found');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
@@ -96,9 +104,73 @@ class _AddFlightState extends State<AddFlight> {
     // print(response.body);
 
     if (response.statusCode == 200) {
-      _showSnackbar('Successfully Updated');
-    } else {
+      _showSnackbar('Successfully Updated Flight');
+    } else if(response.statusCode == 400) {
+      _showSnackbar('Missing Required Fields');
+    } else if(response.statusCode == 404) {
+      _showSnackbar('Flight Not Found');
+    }
+    else {
       _showSnackbar('Unsuccessful');
+    }
+  }
+//datetime picker
+  Future<void> _selectDateTime(TextEditingController controller) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.highContrastLight(
+              primary: Colors.pink, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.pink, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.highContrastLight(
+                primary: Colors.pink, // header background color
+                onPrimary: Colors.white, // header text color
+                onSurface: Colors.black, // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.pink, // button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+      if (pickedTime != null) {
+        final DateTime fullDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+        controller.text = fullDateTime.toString();
+      }
     }
   }
 
@@ -152,20 +224,28 @@ class _AddFlightState extends State<AddFlight> {
                     TextField(
                       controller: _departureTimeController,
                       decoration: InputDecoration(
-                        labelText: 'Departure  Date and Time',
+                        labelText: 'Departure Date and Time',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,
                       ),
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        _selectDateTime(_departureTimeController);
+                      },
                     ),
                     TextField(
                       controller: _arrivalTimeController,
                       decoration: InputDecoration(
-                        labelText: 'Arrival  Date and Time',
+                        labelText: 'Arrival Date and Time',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,
                       ),
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        _selectDateTime(_arrivalTimeController);
+                      },
                     ),
                     TextField(
                       controller: _departureAirportController,
@@ -241,20 +321,28 @@ class _AddFlightState extends State<AddFlight> {
                     TextField(
                       controller: _departureTimeController,
                       decoration: InputDecoration(
-                        labelText: 'Departure Time',
+                        labelText: 'Departure Date and Time',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,
                       ),
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        _selectDateTime(_departureTimeController);
+                      },
                     ),
                     TextField(
                       controller: _arrivalTimeController,
                       decoration: InputDecoration(
-                        labelText: 'Arrival Time',
+                        labelText: 'Arrival Date and Time',
                         labelStyle: TextStyle(color: Colors.black),
                         filled: false,
                         fillColor: Colors.white,
                       ),
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        _selectDateTime(_arrivalTimeController);
+                      },
                     ),
                     TextField(
                       controller: _departureAirportController,
@@ -275,7 +363,6 @@ class _AddFlightState extends State<AddFlight> {
                       ),
                     ),
                     SizedBox(height: 15),
-                    // Button to update
                     ElevatedButton(
                       onPressed: _updateFlight,
                       child: Text('UPDATE'),
@@ -293,7 +380,6 @@ class _AddFlightState extends State<AddFlight> {
       ),
     );
   }
-
   // Editing of the expansion tiles when closed and when open
   Widget _buildExpansionTile
       ({required String title, required List<Widget> children}) {
@@ -331,3 +417,24 @@ class _AddFlightState extends State<AddFlight> {
   }
 }
 
+
+//
+//   Widget _buildExpansionTile({required String title, required List<Widget> children}) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: Colors.white.withOpacity(0.8),
+//         borderRadius: BorderRadius.circular(10),
+//       ),
+//       child: ExpansionTile(
+//         title: Text(
+//           title,
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             color: Colors.black,
+//           ),
+//         ),
+//         children: children,
+//       ),
+//     );
+//   }
+// }

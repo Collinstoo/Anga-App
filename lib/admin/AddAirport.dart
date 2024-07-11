@@ -33,8 +33,11 @@ class _AddAirportState extends State<AddAirport> {
 
     if (response.statusCode == 201) {
       // Assuming success response code is 200
-      _showSnackbar('Successfully Added');
-    } else {
+      _showSnackbar('Successfully Added Airport');
+    } else if(response.statusCode == 400) {
+      _showSnackbar('Missing Required Fields');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
@@ -60,8 +63,13 @@ class _AddAirportState extends State<AddAirport> {
     );
 
     if (response.statusCode == 200) {
-      _showSnackbar('Successfully Deleted');
-    } else {
+      _showSnackbar('Successfully Deleted Airport');
+    } else if(response.statusCode == 404) {
+      _showSnackbar('Airport Not Found');
+    } else if(response.statusCode == 500) {
+      _showSnackbar('Internal Server Error');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
@@ -85,8 +93,13 @@ class _AddAirportState extends State<AddAirport> {
     );
 
     if (response.statusCode == 200) {
-      _showSnackbar('Successfully Updated');
-    } else {
+      _showSnackbar('Successfully Updated Airport');
+    } else if(response.statusCode == 400) {
+      _showSnackbar('Invalid Input or Missing Required Fields');
+    } else if(response.statusCode == 404) {
+      _showSnackbar('Airport Not Found');
+    }
+    else {
       _showSnackbar('Unsuccessful');
     }
   }
