@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'AdminDashboard.dart';
 import 'WelcomeScreen.dart';
+import 'package:flight_booking_application/admin/admin_forgetpassword.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({Key? key}) : super(key: key);
@@ -151,9 +152,15 @@ class _AdminLoginState extends State<AdminLogin> {
                             },
                           ),
                           const SizedBox(height: 20),
-                          const Align(
-                            alignment: Alignment.centerRight,
-                            child: Text('Forgot Password?', style: TextStyle(color: Colors.red)),
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => AdminForgetpassword()));
+                            },
+                            child: const Align(
+                              alignment: Alignment.centerRight,
+                              child: Text('Forgot Password?', style: TextStyle(color: Colors.red)),
+                            ),
                           ),
                           const SizedBox(height: 70),
                           ElevatedButton(
