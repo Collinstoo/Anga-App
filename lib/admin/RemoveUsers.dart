@@ -20,7 +20,7 @@ class _RemoveUsersState extends State<RemoveUsers> {
 
   Future<void> _fetchUsers() async {
     // REST API endpoint to fetch users
-    var response = await http.get(Uri.parse('http://192.168.1.63:8000/api/admin/user/users'));
+    var response = await http.get(Uri.parse('http://38.242.205.219:8000/api/admin/user/users'));
     if (response.statusCode == 200) {
       setState(() {
         users = jsonDecode(response.body);

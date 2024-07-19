@@ -26,7 +26,7 @@ class _AdminLoginState extends State<AdminLogin> {
     final String email = _emailController.text;
     final String password = _passwordController.text;
 
-    final url = Uri.parse('http://192.168.1.63:8000/api/admin/login');
+    final url = Uri.parse('http://38.242.205.219:8000/api/admin/login');
 
     try {
       final response = await http.post(
