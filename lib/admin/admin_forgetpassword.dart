@@ -33,7 +33,7 @@ class _AdminForgetpasswordState extends State<AdminForgetpassword> {
                   icon: const Icon(Icons.arrow_back, color: Colors.white,),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               Align(
                 alignment: Alignment(-1,0),
                 child: Text(
@@ -45,7 +45,7 @@ class _AdminForgetpasswordState extends State<AdminForgetpassword> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 40,),
               Text(
                 'Enter your email to forget password',
                 style: TextStyle(
@@ -67,6 +67,27 @@ class _AdminForgetpasswordState extends State<AdminForgetpassword> {
                 decoration: InputDecoration(
                   suffixIcon: Icon(Icons.email_outlined, color: Colors.grey,),
                   label: Text('Email address', style: TextStyle(color: Colors.grey),),
+                ),
+              ),
+              SizedBox(height: 40,),
+              ElevatedButton(
+                onPressed: () {  },
+                // onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                ),
+
+                child: const Text(
+                  'NEXT',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],
